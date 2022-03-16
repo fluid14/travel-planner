@@ -1,9 +1,26 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import * as styles from './index.module.sass';
+import { points as mapPoints } from './points';
 
 export default function Map() {
   const googleMap = useRef(null);
+  const points = { metro: true, poi: true };
+  let mapStyles = [];
+  let map;
+
+  const onChangePoints = (type) => {
+    points[type] = !points[type];
+    mapStyles = [];
+    let pointsArray = [];
+
+    for (const [key, value] of Object.entries(points)) {
+      value ? pointsArray.push(key) : null;
+    }
+
+    pointsArray.forEach((point) => mapStyles.push(...mapPoints[point]));
+    map.setOptions({ styles: mapStyles });
+  };
 
   useEffect(() => {
     const loader = new Loader({
@@ -12,86 +29,28 @@ export default function Map() {
       libraries: ['places']
     });
 
-    const myStyles = [
-      {
-        featureType: 'poi',
-        elementType: 'labels',
-        stylers: [{ visibility: 'off' }]
-      },
-      //metro
-      {
-        featureType: 'administrative',
-        elementType: 'geometry',
-        stylers: [
-          {
-            visibility: 'off'
-          }
-        ]
-      },
-      {
-        featureType: 'poi',
-        stylers: [
-          {
-            visibility: 'off'
-          }
-        ]
-      },
-      {
-        featureType: 'road',
-        stylers: [
-          {
-            visibility: 'on'
-          }
-        ]
-      },
-      {
-        featureType: 'road',
-        elementType: 'labels.icon',
-        stylers: [
-          {
-            visibility: 'off'
-          }
-        ]
-      },
-      {
-        featureType: 'transit',
-        stylers: [
-          {
-            visibility: 'off'
-          }
-        ]
-      }
-    ];
-
     const mapOptions = {
       center: {
         lat: 40.727505,
         lng: -73.9389489
       },
       zoom: 12,
-      styles: myStyles
+      styles: mapStyles
     };
 
-    let map;
     loader.load().then(() => {
       const google = window.google;
       map = new google.maps.Map(googleMap.current, mapOptions);
 
       // SEARCH BOX -----------------
-      // Create the search box and link it to the UI element.
       const input = document.getElementById('pac-input');
       const searchBox = new google.maps.places.SearchBox(input);
-
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-      // Bias the SearchBox results towards current map's viewport.
       map.addListener('bounds_changed', () => {
         searchBox.setBounds(map.getBounds());
       });
 
       let markers = [];
-
-      // Listen for the event fired when the user selects a prediction and retrieve
-      // more details for that place.
       searchBox.addListener('places_changed', () => {
         const places = searchBox.getPlaces();
 
@@ -99,13 +58,11 @@ export default function Map() {
           return;
         }
 
-        // Clear out the old markers.
         markers.forEach((marker) => {
           marker.setMap(null);
         });
         markers = [];
 
-        // For each place, get the icon, name and location.
         const bounds = new google.maps.LatLngBounds();
 
         places.forEach((place) => {
@@ -122,7 +79,6 @@ export default function Map() {
             scaledSize: new google.maps.Size(25, 25)
           };
 
-          // Create a marker for each place.
           markers.push(
             new google.maps.Marker({
               map,
@@ -132,7 +88,6 @@ export default function Map() {
             })
           );
           if (place.geometry.viewport) {
-            // Only geocodes have viewport.
             bounds.union(place.geometry.viewport);
           } else {
             bounds.extend(place.geometry.location);
@@ -142,11 +97,16 @@ export default function Map() {
       });
     });
   });
+
   return (
     <>
       <input id="pac-input" className="controls" type="text" placeholder="Search Box" />
-      <button className="btn btn-primary mr-1">Metro</button>
-      <button className="btn btn-primary mr-1">Poi</button>
+      <button className="btn btn-primary mr-1" onClick={() => onChangePoints('metro')}>
+        Metro
+      </button>
+      <button className="btn btn-primary mr-1" onClick={() => onChangePoints('poi')}>
+        Poi
+      </button>
       <div className={styles.map} id="map" ref={googleMap}></div>
     </>
   );
