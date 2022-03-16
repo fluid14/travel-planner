@@ -1,3 +1,4 @@
+export const pointsEnum = { METRO: 'metro', POI: 'poi' };
 export const points = {
   poi: [
     {
@@ -10,14 +11,6 @@ export const points = {
     {
       featureType: 'administrative',
       elementType: 'geometry',
-      stylers: [
-        {
-          visibility: 'off'
-        }
-      ]
-    },
-    {
-      featureType: 'poi',
       stylers: [
         {
           visibility: 'off'

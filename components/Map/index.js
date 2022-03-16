@@ -1,24 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import * as styles from './index.module.sass';
-import { points as mapPoints } from './points';
+import { points as mapPoints, pointsEnum } from './points';
+import cx from 'classnames';
 
 export default function Map() {
   const googleMap = useRef(null);
-  const points = { metro: true, poi: true };
+  const points = { metro: false, poi: false };
   let mapStyles = [];
   let map;
 
   const onChangePoints = (type) => {
     points[type] = !points[type];
     mapStyles = [];
-    let pointsArray = [];
 
     for (const [key, value] of Object.entries(points)) {
-      value ? pointsArray.push(key) : null;
+      if (value) mapStyles.push(...mapPoints[key]);
     }
 
-    pointsArray.forEach((point) => mapStyles.push(...mapPoints[point]));
     map.setOptions({ styles: mapStyles });
   };
 
@@ -35,6 +34,8 @@ export default function Map() {
         lng: -73.9389489
       },
       zoom: 12,
+      mapTypeControl: false,
+      streetViewControl: false,
       styles: mapStyles
     };
 
@@ -101,13 +102,17 @@ export default function Map() {
   return (
     <>
       <input id="pac-input" className="controls" type="text" placeholder="Search Box" />
-      <button className="btn btn-primary mr-1" onClick={() => onChangePoints('metro')}>
-        Metro
-      </button>
-      <button className="btn btn-primary mr-1" onClick={() => onChangePoints('poi')}>
-        Poi
-      </button>
-      <div className={styles.map} id="map" ref={googleMap}></div>
+      <div className={styles.map} id="map" ref={googleMap} />
+      <div className={styles.pointsWrap}>
+        {Object.entries(pointsEnum).map(([key, value]) => (
+          <button
+            key={key}
+            className={cx(styles.btn, 'btn', 'btn-primary')}
+            onClick={() => onChangePoints(value)}>
+            {value}
+          </button>
+        ))}
+      </div>
     </>
   );
 }
