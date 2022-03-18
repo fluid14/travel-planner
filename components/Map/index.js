@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import * as styles from './index.module.sass';
 import { points as mapPoints, pointsEnum } from './points';
@@ -62,6 +62,7 @@ export default function Map() {
         markers.forEach((marker) => {
           marker.setMap(null);
         });
+
         markers = [];
 
         const bounds = new google.maps.LatLngBounds();
@@ -71,23 +72,32 @@ export default function Map() {
             console.log('Returned place contains no geometry');
             return;
           }
+          const marker = new google.maps.Marker({
+            map,
+            title: place.name,
+            position: place.geometry.location,
+            address: place.formatted_address,
+            open: place.opening_hours.isOpen,
+            priceLevel: place.price_level,
+            rating: place.rating,
+            totalRatings: place.user_ratings_total
+          });
+          markers.push(marker);
 
-          const icon = {
-            url: place.icon,
-            size: new google.maps.Size(71, 71),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(25, 25)
-          };
-
-          markers.push(
-            new google.maps.Marker({
+          google.maps.event.addListener(marker, 'click', function (e) {
+            e.preventDefault;
+            console.log(marker);
+            const contentString = `<p>${marker.title}</p>` + `<p>${marker.address}</p>`;
+            const infowindow = new google.maps.InfoWindow({
+              content: contentString
+            });
+            infowindow.open({
+              anchor: marker,
               map,
-              icon,
-              title: place.name,
-              position: place.geometry.location
-            })
-          );
+              shouldFocus: false
+            });
+          });
+
           if (place.geometry.viewport) {
             bounds.union(place.geometry.viewport);
           } else {
@@ -100,8 +110,13 @@ export default function Map() {
   });
 
   return (
-    <>
-      <input id="pac-input" className="controls" type="text" placeholder="Search Box" />
+    <div className={styles.mapWrap}>
+      <input
+        id="pac-input"
+        className={cx('controls', styles.search)}
+        type="text"
+        placeholder="Search Box"
+      />
       <div className={styles.map} id="map" ref={googleMap} />
       <div className={styles.pointsWrap}>
         {Object.entries(pointsEnum).map(([key, value]) => (
@@ -113,6 +128,6 @@ export default function Map() {
           </button>
         ))}
       </div>
-    </>
+    </div>
   );
 }
