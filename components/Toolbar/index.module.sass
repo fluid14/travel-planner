@@ -1,13 +1,18 @@
 @import './styles/config'
 
+$borderRadius: 20px
+
 .toolbarWrap
   position: absolute
   top: 0
   right: 0
   transform: translateX(100%)
-  width: 300px
+  width: 500px
   height: 100vh
   background-color: $white
+  border-bottom-left-radius: $borderRadius
+  border-top-left-radius: $borderRadius
+  padding: 20px
   transition: .3s ease
 
   &.active

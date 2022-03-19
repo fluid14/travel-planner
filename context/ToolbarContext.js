@@ -8,7 +8,6 @@ export default function ToolbarStateProvider({ children }) {
 
   const toggleState = () => {
     setState((prevState) => !prevState);
-    console.log(state);
   };
 
   return (
@@ -27,7 +26,7 @@ const ToolbarStateConsumer = ({ children }) => (
 );
 
 ToolbarStateConsumer.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.any.isRequired
 };
 
 export { ToolbarStateProvider, ToolbarStateConsumer };

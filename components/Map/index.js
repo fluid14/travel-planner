@@ -3,6 +3,8 @@ import { Loader } from '@googlemaps/js-api-loader';
 import * as styles from './index.module.sass';
 import { points as mapPoints, pointsEnum } from './points';
 import cx from 'classnames';
+import ShowToolbarButton from '../Toolbar/ShowToolbarButton';
+import { ModalStateConsumer } from '../../context/ModalContext';
 
 export default function Map() {
   const googleMap = useRef(null);
@@ -72,6 +74,8 @@ export default function Map() {
             console.log('Returned place contains no geometry');
             return;
           }
+
+          console.log(place);
           const marker = new google.maps.Marker({
             map,
             title: place.name,
@@ -80,7 +84,8 @@ export default function Map() {
             open: place.opening_hours.isOpen,
             priceLevel: place.price_level,
             rating: place.rating,
-            totalRatings: place.user_ratings_total
+            totalRatings: place.user_ratings_total,
+            placeId: place.place_id
           });
           markers.push(marker);
 
@@ -92,7 +97,9 @@ export default function Map() {
               `<p class="title">${marker?.title}</p>` +
               `<p>${marker?.address}</p>` +
               `<p><span>Oceny: </span>${marker?.rating}/${marker?.totalRatings}</p>` +
-              `<p><span>Price level: </span>${marker?.priceLevel}</p>`;
+              `<p><span>Poziom cenowy: </span>${marker?.priceLevel}</p>` +
+              `<a href="https://www.google.com/maps/place/?q=place_id:${marker?.placeId}" target="_blank" class="btn btn-primary">Pokaż w Google Maps</a>` +
+              `<button class="btn btn-primary" type="button" onclick="document.getElementById('actionButton').click();">Dodaj do list</button>`;
 
             const infowindow = new google.maps.InfoWindow({
               content: contentString
@@ -117,12 +124,15 @@ export default function Map() {
 
   return (
     <div className={styles.mapWrap}>
-      <input
-        id="pac-input"
-        className={cx('controls', styles.search)}
-        type="text"
-        placeholder="Search Box"
-      />
+      <div className={styles.searchWrap}>
+        <input
+          id="pac-input"
+          className={cx('controls', styles.search)}
+          type="text"
+          placeholder="Search Box"
+        />
+        <ShowToolbarButton />
+      </div>
       <div className={styles.map} id="map" ref={googleMap} />
       <div className={styles.pointsWrap}>
         {Object.entries(pointsEnum).map(([key, value]) => (
@@ -134,6 +144,15 @@ export default function Map() {
           </button>
         ))}
       </div>
+      <ModalStateConsumer>
+        {({ toggleState }) => (
+          <button
+            id="actionButton"
+            type="button"
+            onClick={() => toggleState('Tytu test', 'address test')}
+          />
+        )}
+      </ModalStateConsumer>
     </div>
   );
 }
