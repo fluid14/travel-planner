@@ -87,7 +87,13 @@ export default function Map() {
           google.maps.event.addListener(marker, 'click', function (e) {
             e.preventDefault;
             console.log(marker);
-            const contentString = `<p>${marker.title}</p>` + `<p>${marker.address}</p>`;
+
+            const contentString =
+              `<p class="title">${marker?.title}</p>` +
+              `<p>${marker?.address}</p>` +
+              `<p><span>Oceny: </span>${marker?.rating}/${marker?.totalRatings}</p>` +
+              `<p><span>Price level: </span>${marker?.priceLevel}</p>`;
+
             const infowindow = new google.maps.InfoWindow({
               content: contentString
             });
