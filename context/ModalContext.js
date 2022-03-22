@@ -3,18 +3,15 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import * as styles from '../components/AddPointModal/index.module.sass';
 
-const ModalStateContext = React.createContext();
+const ModalStateContext = React.createContext('');
 
 export default function ModalStateProvider({ children }) {
   const [state, setState] = useState(false);
-  const [title, setTitle] = useState('');
-  const [address, setAddress] = useState('');
-  const [description, setDescription] = useState('');
+  const [pointData, setPointData] = useState({ title: '', address: '', position: '' });
 
-  const toggleState = (title = '', address = '') => {
+  const toggleState = (e) => {
     setState((prevState) => !prevState);
-    setTitle(() => title);
-    setAddress(() => address);
+    if (e) setPointData(() => JSON.parse(e.nativeEvent.srcElement.dataset.value));
   };
 
   return (
@@ -22,12 +19,7 @@ export default function ModalStateProvider({ children }) {
       value={{
         state,
         toggleState,
-        title,
-        setTitle,
-        address,
-        setAddress,
-        description,
-        setDescription
+        pointData
       }}>
       {children}
     </ModalStateContext.Provider>
@@ -46,4 +38,4 @@ ModalStateConsumer.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-export { ModalStateProvider, ModalStateConsumer };
+export { ModalStateProvider, ModalStateConsumer, ModalStateContext };

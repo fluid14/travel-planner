@@ -7,7 +7,6 @@ export default function Toolbar() {
     <ToolbarStateConsumer>
       {(toolbar) => (
         <>
-          <h1>test {toolbar.state}</h1>
           <div className={cx(styles.toolbarWrap, { [styles.active]: toolbar.state })}>
             <div className={styles.listWrap}>
               <div className="accordion" id="accordionExample">

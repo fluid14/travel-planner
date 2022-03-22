@@ -76,7 +76,7 @@ export default function Map() {
           }
 
           console.log(place);
-          const marker = new google.maps.Marker({
+          const markerTemp = {
             map,
             title: place.name,
             position: place.geometry.location,
@@ -86,12 +86,17 @@ export default function Map() {
             rating: place.rating,
             totalRatings: place.user_ratings_total,
             placeId: place.place_id
-          });
+          };
+
+          const marker = new google.maps.Marker(markerTemp);
           markers.push(marker);
 
           google.maps.event.addListener(marker, 'click', function (e) {
             e.preventDefault;
             console.log(marker);
+
+            const button = document.getElementById('actionButton');
+            button.setAttribute('data-value', JSON.stringify({ ...markerTemp, map: null }));
 
             const contentString =
               `<p class="title">${marker?.title}</p>` +
@@ -146,11 +151,7 @@ export default function Map() {
       </div>
       <ModalStateConsumer>
         {({ toggleState }) => (
-          <button
-            id="actionButton"
-            type="button"
-            onClick={() => toggleState('Tytu test', 'address test')}
-          />
+          <button id="actionButton" type="button" onClick={(e) => toggleState(e)} />
         )}
       </ModalStateConsumer>
     </div>

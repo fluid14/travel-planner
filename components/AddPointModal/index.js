@@ -6,16 +6,7 @@ import { ModalStateConsumer } from '../../context/ModalContext';
 export default function AddPointModal() {
   return (
     <ModalStateConsumer>
-      {({
-        state,
-        toggleState,
-        title,
-        setTitle,
-        address,
-        setAddress,
-        description,
-        setDescription
-      }) => (
+      {({ state, toggleState, pointData }) => (
         <div className={cx('modal', { [styles.show]: state })}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -26,7 +17,7 @@ export default function AddPointModal() {
                   className="btn-close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
-                  onClick={toggleState}
+                  onClick={() => toggleState(null)}
                 />
               </div>
               <div className="modal-body">
@@ -58,7 +49,7 @@ export default function AddPointModal() {
                           className="form-control"
                           id="title"
                           name="title"
-                          value={title}
+                          value={pointData.title}
                         />
                       </div>
                       <div className="mb-3">
@@ -70,7 +61,7 @@ export default function AddPointModal() {
                           className="form-control"
                           id="address"
                           name="address"
-                          value={address}
+                          value={pointData.address}
                         />
                       </div>
                       <div className="mb-3">
@@ -82,7 +73,7 @@ export default function AddPointModal() {
                           id="description"
                           name="description"
                           rows="5"
-                          value={description}
+                          value=""
                         />
                       </div>
                       <button
