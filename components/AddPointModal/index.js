@@ -6,90 +6,91 @@ import { ModalStateConsumer } from '../../context/ModalContext';
 export default function AddPointModal() {
   return (
     <ModalStateConsumer>
-      {({ state, toggleState, pointData }) => (
-        <div className={cx('modal', { [styles.show]: state })}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Dodaj nowy punkt</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                  onClick={() => toggleState(null)}
-                />
-              </div>
-              <div className="modal-body">
-                <Formik
-                  initialValues={{ email: '', password: '' }}
-                  validate={(values) => {
-                    const errors = {};
-                    if (!values.email) {
-                      errors.email = 'Required';
-                    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-                      errors.email = 'Invalid email address';
-                    }
-                    return errors;
-                  }}
-                  onSubmit={(values, { setSubmitting }) => {
-                    setTimeout(() => {
-                      alert(JSON.stringify(values, null, 2));
+      {({ state, toggleState, pointData }) => {
+        console.log(pointData);
+        return (
+          <div className={cx('modal', { [styles.show]: state })}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Dodaj nowy punkt</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    onClick={() => toggleState(null)}
+                  />
+                </div>
+                <div className="modal-body">
+                  <Formik
+                    initialValues={{
+                      ...pointData,
+                      description: ''
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+                      console.log(values);
                       setSubmitting(false);
-                    }, 400);
-                  }}>
-                  {({ isSubmitting }) => (
-                    <Form>
-                      <div className="mb-3">
-                        <label htmlFor="title" className="form-label">
-                          Tytuł
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="title"
-                          name="title"
-                          value={pointData.title}
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="address" className="form-label">
-                          Adres
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="address"
-                          name="address"
-                          value={pointData.address}
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="description" className="form-label">
-                          Opis
-                        </label>
-                        <textarea
-                          className="form-control"
-                          id="description"
-                          name="description"
-                          rows="5"
-                          value=""
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="btn btn-primary align-self-end">
-                        Submit
-                      </button>
-                    </Form>
-                  )}
-                </Formik>
+                    }}>
+                    {({ isSubmitting, values, handleChange, handleBlur, handleSubmit }) => (
+                      <Form onSubmit={handleSubmit}>
+                        <div className="mb-3">
+                          <label htmlFor="title" className="form-label">
+                            Tytuł
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="title"
+                            name="title"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.title}
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="address" className="form-label">
+                            Adres
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="address"
+                            name="address"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.address}
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="description" className="form-label">
+                            Opis
+                          </label>
+                          <textarea
+                            className="form-control"
+                            id="description"
+                            name="description"
+                            rows="5"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.description}
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="btn btn-primary align-self-end">
+                          Submit
+                        </button>
+                      </Form>
+                    )}
+                  </Formik>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      }}
     </ModalStateConsumer>
   );
 }
