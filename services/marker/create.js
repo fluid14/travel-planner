@@ -8,9 +8,9 @@ const schema = Joi.object({
   lng: Joi.number().required(),
   description: Joi.string(),
   placeId: Joi.string().required(),
-  priceLevel: Joi.number().required(),
-  rating: Joi.number().required(),
-  totalRatings: Joi.number().required()
+  priceLevel: Joi.number(),
+  rating: Joi.number(),
+  totalRatings: Joi.number()
 });
 
 export default async (payload) => {

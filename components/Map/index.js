@@ -75,7 +75,6 @@ export default function Map() {
             return;
           }
 
-          console.log(place);
           const markerTemp = {
             map,
             title: place.name,
@@ -93,7 +92,6 @@ export default function Map() {
 
           google.maps.event.addListener(marker, 'click', function (e) {
             e.preventDefault;
-            console.log(marker);
 
             const button = document.getElementById('actionButton');
             button.setAttribute('data-value', JSON.stringify({ ...markerTemp, map: null }));
