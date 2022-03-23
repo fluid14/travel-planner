@@ -24,6 +24,7 @@ export default function AddPointModal() {
                 </div>
                 <div className="modal-body">
                   <Formik
+                    enableReinitialize={true}
                     initialValues={{
                       ...pointData,
                       description: ''
