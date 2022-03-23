@@ -2,12 +2,48 @@ import { Form, Formik } from 'formik';
 import cx from 'classnames';
 import * as styles from './index.module.sass';
 import { ModalStateConsumer } from '../../context/ModalContext';
+import { toast } from 'react-toastify';
 
 export default function AddPointModal() {
+  const handleSubmit = async (values, setSubmitting, toggleState) => {
+    toggleState();
+    const adding = toast.loading('Dodaje nowy punkt');
+    const payload = {
+      ...values,
+      ...values.position
+    };
+
+    delete payload.position;
+    delete payload.map;
+    delete payload.clickable;
+    delete payload.visible;
+
+    const response = await fetch('/api/markers', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      toast.update(adding, {
+        render: 'Dodałeś pomyślnie nowy punkt',
+        type: 'success',
+        isLoading: false
+      });
+    } else {
+      toast.update(adding, {
+        render: `Coś poszło nie tak :( [${response.statusText}]`,
+        type: 'error',
+        isLoading: false
+      });
+    }
+    setSubmitting(false);
+  };
   return (
     <ModalStateConsumer>
       {({ state, toggleState, pointData }) => {
-        console.log(pointData);
         return (
           <div className={cx('modal', { [styles.show]: state })}>
             <div className="modal-dialog modal-dialog-centered">
@@ -29,12 +65,11 @@ export default function AddPointModal() {
                       ...pointData,
                       description: ''
                     }}
-                    onSubmit={(values, { setSubmitting }) => {
-                      console.log(values);
-                      setSubmitting(false);
-                    }}>
+                    onSubmit={async (values, { setSubmitting }) =>
+                      handleSubmit(values, setSubmitting, toggleState)
+                    }>
                     {({ isSubmitting, values, handleChange, handleBlur, handleSubmit }) => (
-                      <Form onSubmit={handleSubmit}>
+                      <Form className="d-flex flex-column" onSubmit={handleSubmit}>
                         <div className="mb-3">
                           <label htmlFor="title" className="form-label">
                             Tytuł
@@ -77,12 +112,17 @@ export default function AddPointModal() {
                             value={values.description}
                           />
                         </div>
-                        <button
-                          type="submit"
-                          disabled={isSubmitting}
-                          className="btn btn-primary align-self-end">
-                          Submit
-                        </button>
+                        <div className={cx(styles.buttonsWrap)}>
+                          <button type="submit" disabled={isSubmitting} className="btn btn-primary">
+                            Dodaj
+                          </button>
+                          <button
+                            onClick={() => toggleState(null)}
+                            type="reset"
+                            className={cx(styles.btn, 'btn', 'btn-danger')}>
+                            Anuluj
+                          </button>
+                        </div>
                       </Form>
                     )}
                   </Formik>
