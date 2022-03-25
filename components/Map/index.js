@@ -1,12 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import * as styles from './index.module.sass';
 import { points as mapPoints, pointsEnum } from './points';
 import cx from 'classnames';
 import ShowToolbarButton from '../Toolbar/ShowToolbarButton';
 import { ModalStateConsumer } from '../../context/ModalContext';
+import { MarkersDataContext } from '../../context/MarkersDataContext';
 
 export default function Map() {
+  const { markersData } = useContext(MarkersDataContext);
   const googleMap = useRef(null);
   const points = { metro: false, poi: false };
   let mapStyles = [];

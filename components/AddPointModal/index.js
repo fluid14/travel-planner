@@ -8,7 +8,7 @@ import { useContext, useEffect } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 
 export default function AddPointModal() {
-  const { setMarkersData } = useContext(MarkersDataContext);
+  const { getMarkers } = useContext(MarkersDataContext);
   const handleSubmit = async (values, setSubmitting, toggleState) => {
     toggleState();
     const adding = toast.loading('Dodaje nowy punkt');
@@ -33,19 +33,14 @@ export default function AddPointModal() {
           closeOnClick: true
         })
       )
-      .then(() =>
-        axios
-          .get('/api/markers')
-          .then((res) => res.data)
-          .then(setMarkersData)
-      )
       .catch((error) =>
         toast.update(adding, {
           render: `Coś poszło nie tak :( [${error}]`,
           type: 'error',
           isLoading: false
         })
-      );
+      )
+      .finally(() => getMarkers());
     setSubmitting(false);
   };
   return (

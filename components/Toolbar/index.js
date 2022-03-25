@@ -13,8 +13,13 @@ export default function Toolbar() {
     axios
       .delete('/api/markers', { params: { id } })
       .then(() => toast.success('Usunięto lokalizacje!'))
-      .then(getMarkers)
-      .catch((error) => toast.error(error));
+      .catch((error) =>
+        toast.error(error, {
+          autoClose: true,
+          closeOnClick: true
+        })
+      )
+      .finally(() => getMarkers());
   };
 
   useEffect(() => {
