@@ -78,6 +78,12 @@ export default function Toolbar() {
                         <button className={cx(styles.btn, 'btn btn-primary')} type="button">
                           Pokaż
                         </button>
+                        <a
+                          href={`https://www.google.com/maps/place/?q=place_id:${marker?.placeId}`}
+                          target="_blank"
+                          className={cx(styles.btn, 'btn btn-primary')}>
+                          Pokaż w Google Maps
+                        </a>
                         <button
                           onClick={() => handlingDelete(marker.recordId)}
                           className={cx(styles.btn, 'btn btn-danger')}
