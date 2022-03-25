@@ -27,7 +27,7 @@ export default function ModalStateProvider({ children }) {
 }
 
 ModalStateProvider.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.any.isRequired
 };
 
 const ModalStateConsumer = ({ children }) => (
@@ -35,7 +35,7 @@ const ModalStateConsumer = ({ children }) => (
 );
 
 ModalStateConsumer.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.any.isRequired
 };
 
 export { ModalStateProvider, ModalStateConsumer, ModalStateContext };

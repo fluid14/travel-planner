@@ -1,20 +1,25 @@
 import * as styles from './index.module.sass';
 import { ToolbarStateConsumer } from '../../context/ToolbarContext';
 import cx from 'classnames';
-import { jsonFetcher } from '../../utils';
-import useSWR from 'swr';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useContext, useEffect } from 'react';
+import { MarkersDataContext } from '../../context/MarkersDataContext';
 
 export default function Toolbar() {
-  const { data } = useSWR('/api/markers', jsonFetcher);
-  console.log(data);
+  const { markersData, setMarkersData, getMarkers } = useContext(MarkersDataContext);
+
   const handlingDelete = (id) => {
     axios
       .delete('/api/markers', { params: { id } })
       .then(() => toast.success('Usunięto lokalizacje!'))
+      .then(getMarkers)
       .catch((error) => toast.error(error));
   };
+
+  useEffect(() => {
+    getMarkers();
+  }, [axios, setMarkersData]);
 
   return (
     <ToolbarStateConsumer>
@@ -22,7 +27,7 @@ export default function Toolbar() {
         <>
           <div className={cx(styles.toolbarWrap, { [styles.active]: toolbar.state })}>
             <div className={cx(styles.pointsWrap, 'accordion')} id="points">
-              {data?.map((marker) => (
+              {markersData?.map((marker) => (
                 <div key={marker.id} className={cx(styles.bar, 'accordion-item')}>
                   <h2
                     className={cx(styles.header, 'accordion-header')}
@@ -69,7 +74,7 @@ export default function Toolbar() {
                           Pokaż
                         </button>
                         <button
-                          onClick={() => handlingDelete(marker.id)}
+                          onClick={() => handlingDelete(marker.recordId)}
                           className={cx(styles.btn, 'btn btn-danger')}
                           type="button">
                           Usuń

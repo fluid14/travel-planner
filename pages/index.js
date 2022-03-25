@@ -4,6 +4,7 @@ import ToolbarStateProvider from '../context/ToolbarContext';
 import AddPointModal from '../components/AddPointModal';
 import ModalStateProvider from '../context/ModalContext';
 import { ToastContainer } from 'react-toastify';
+import { MarkersDataContextProvider } from '../context/MarkersDataContext';
 
 export default function Home() {
   return (
@@ -18,15 +19,17 @@ export default function Home() {
         draggable
         pauseOnHover
       />
-      <ToolbarStateProvider>
-        <ModalStateProvider>
-          <>
-            <Map />
-            <Toolbar />
-            <AddPointModal />
-          </>
-        </ModalStateProvider>
-      </ToolbarStateProvider>
+      <MarkersDataContextProvider>
+        <ToolbarStateProvider>
+          <ModalStateProvider>
+            <>
+              <Map />
+              <Toolbar />
+              <AddPointModal />
+            </>
+          </ModalStateProvider>
+        </ToolbarStateProvider>
+      </MarkersDataContextProvider>
     </main>
   );
 }

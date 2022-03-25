@@ -3,8 +3,12 @@ import cx from 'classnames';
 import * as styles from './index.module.sass';
 import { ModalStateConsumer } from '../../context/ModalContext';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useContext, useEffect } from 'react';
+import { MarkersDataContext } from '../../context/MarkersDataContext';
 
 export default function AddPointModal() {
+  const { setMarkersData } = useContext(MarkersDataContext);
   const handleSubmit = async (values, setSubmitting, toggleState) => {
     toggleState();
     const adding = toast.loading('Dodaje nowy punkt');
@@ -18,27 +22,30 @@ export default function AddPointModal() {
     delete payload.clickable;
     delete payload.visible;
 
-    const response = await fetch('/api/markers', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (response.ok) {
-      toast.update(adding, {
-        render: 'Dodałeś pomyślnie nowy punkt',
-        type: 'success',
-        isLoading: false
-      });
-    } else {
-      toast.update(adding, {
-        render: `Coś poszło nie tak :( [${response.statusText}]`,
-        type: 'error',
-        isLoading: false
-      });
-    }
+    await axios
+      .post('/api/markers', payload)
+      .then(() =>
+        toast.update(adding, {
+          render: 'Dodałeś pomyślnie nowy punkt',
+          type: 'success',
+          isLoading: false,
+          autoClose: true,
+          closeOnClick: true
+        })
+      )
+      .then(() =>
+        axios
+          .get('/api/markers')
+          .then((res) => res.data)
+          .then(setMarkersData)
+      )
+      .catch((error) =>
+        toast.update(adding, {
+          render: `Coś poszło nie tak :( [${error}]`,
+          type: 'error',
+          isLoading: false
+        })
+      );
     setSubmitting(false);
   };
   return (
