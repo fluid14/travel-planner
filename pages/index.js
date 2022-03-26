@@ -5,6 +5,7 @@ import AddPointModal from '../components/AddPointModal';
 import ModalStateProvider from '../context/ModalContext';
 import { ToastContainer } from 'react-toastify';
 import { MarkersDataContextProvider } from '../context/MarkersDataContext';
+import Map2 from '../components/Map2';
 
 export default function Home() {
   return (
@@ -23,7 +24,8 @@ export default function Home() {
         <ToolbarStateProvider>
           <ModalStateProvider>
             <>
-              <Map />
+              {/*<Map />*/}
+              <Map2 />
               <Toolbar />
               <AddPointModal />
             </>

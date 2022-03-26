@@ -2,8 +2,6 @@ import { Form, Formik } from 'formik';
 import cx from 'classnames';
 import * as styles from './index.module.sass';
 import { ModalStateConsumer } from '../../context/ModalContext';
-import { toast } from 'react-toastify';
-import axios from 'axios';
 import { useContext } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 

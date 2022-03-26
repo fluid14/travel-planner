@@ -8,11 +8,22 @@ import { ModalStateConsumer } from '../../context/ModalContext';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 
 export default function Map() {
-  // const { markersData } = useContext(MarkersDataContext);
+  const { markersData, setMarkersData } = useContext(MarkersDataContext);
   const googleMap = useRef(null);
   const points = { metro: false, poi: false };
   let mapStyles = [];
   let map;
+
+  const mapOptions = {
+    center: {
+      lat: 40.727505,
+      lng: -73.9389489
+    },
+    zoom: 12,
+    mapTypeControl: false,
+    streetViewControl: false,
+    styles: mapStyles
+  };
 
   const onChangePoints = (type) => {
     points[type] = !points[type];
@@ -25,6 +36,30 @@ export default function Map() {
     map.setOptions({ styles: mapStyles });
   };
 
+  const markerEvent = (google, marker, markerTemp) => {
+    google.maps.event.addListener(marker, 'click', function (e) {
+      e.preventDefault;
+
+      document
+        .getElementById('actionButton')
+        .setAttribute('data-value', JSON.stringify({ ...markerTemp, map: null }));
+
+      new google.maps.InfoWindow({
+        content:
+          `<p class="title">${marker?.title}</p>` +
+          `<p>${marker?.address}</p>` +
+          `<p><span>Oceny: </span>${marker?.rating}/${marker?.totalRatings}</p>` +
+          `<p><span>Poziom cenowy: </span>${marker?.priceLevel}</p>` +
+          `<a href="https://www.google.com/maps/place/?q=place_id:${marker?.placeId}" target="_blank" class="btn btn-primary">Pokaż w Google Maps</a>` +
+          `<button class="btn btn-primary" type="button" onclick="document.getElementById('actionButton').click();">Dodaj do list</button>`
+      }).open({
+        anchor: marker,
+        map,
+        shouldFocus: false
+      });
+    });
+  };
+
   useEffect(() => {
     const loader = new Loader({
       apiKey: process.env.NEXT_PUBLIC_MAPS_KEY,
@@ -32,22 +67,10 @@ export default function Map() {
       libraries: ['places']
     });
 
-    const mapOptions = {
-      center: {
-        lat: 40.727505,
-        lng: -73.9389489
-      },
-      zoom: 12,
-      mapTypeControl: false,
-      streetViewControl: false,
-      styles: mapStyles
-    };
-
     loader.load().then(() => {
       const google = window.google;
       map = new google.maps.Map(googleMap.current, mapOptions);
 
-      // SEARCH BOX -----------------
       const input = document.getElementById('pac-input');
       const searchBox = new google.maps.places.SearchBox(input);
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -82,7 +105,6 @@ export default function Map() {
             title: place.name,
             position: place.geometry.location,
             address: place.formatted_address,
-            open: place.opening_hours.isOpen,
             priceLevel: place.price_level,
             rating: place.rating,
             totalRatings: place.user_ratings_total,
@@ -92,29 +114,7 @@ export default function Map() {
           const marker = new google.maps.Marker(markerTemp);
           markers.push(marker);
 
-          google.maps.event.addListener(marker, 'click', function (e) {
-            e.preventDefault;
-
-            const button = document.getElementById('actionButton');
-            button.setAttribute('data-value', JSON.stringify({ ...markerTemp, map: null }));
-
-            const contentString =
-              `<p class="title">${marker?.title}</p>` +
-              `<p>${marker?.address}</p>` +
-              `<p><span>Oceny: </span>${marker?.rating}/${marker?.totalRatings}</p>` +
-              `<p><span>Poziom cenowy: </span>${marker?.priceLevel}</p>` +
-              `<a href="https://www.google.com/maps/place/?q=place_id:${marker?.placeId}" target="_blank" class="btn btn-primary">Pokaż w Google Maps</a>` +
-              `<button class="btn btn-primary" type="button" onclick="document.getElementById('actionButton').click();">Dodaj do list</button>`;
-
-            const infowindow = new google.maps.InfoWindow({
-              content: contentString
-            });
-            infowindow.open({
-              anchor: marker,
-              map,
-              shouldFocus: false
-            });
-          });
+          markerEvent(google, marker, markerTemp);
 
           if (place.geometry.viewport) {
             bounds.union(place.geometry.viewport);
@@ -125,7 +125,7 @@ export default function Map() {
         map.fitBounds(bounds);
       });
     });
-  });
+  }, setMarkersData);
 
   return (
     <div className={styles.mapWrap}>
