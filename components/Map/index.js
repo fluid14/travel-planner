@@ -8,7 +8,7 @@ import { ModalStateConsumer } from '../../context/ModalContext';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 
 export default function Map() {
-  const { markersData } = useContext(MarkersDataContext);
+  // const { markersData } = useContext(MarkersDataContext);
   const googleMap = useRef(null);
   const points = { metro: false, poi: false };
   let mapStyles = [];

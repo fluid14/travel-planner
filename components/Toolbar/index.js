@@ -2,25 +2,11 @@ import * as styles from './index.module.sass';
 import { ToolbarStateConsumer } from '../../context/ToolbarContext';
 import cx from 'classnames';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { useContext, useEffect } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 
 export default function Toolbar() {
-  const { markersData, setMarkersData, getMarkers } = useContext(MarkersDataContext);
-
-  const handlingDelete = (id) => {
-    axios
-      .delete('/api/markers', { params: { id } })
-      .then(() => toast.success('Usunięto lokalizacje!'))
-      .catch((error) =>
-        toast.error(error, {
-          autoClose: true,
-          closeOnClick: true
-        })
-      )
-      .finally(() => getMarkers());
-  };
+  const { markersData, setMarkersData, getMarkers, removeMarker } = useContext(MarkersDataContext);
 
   useEffect(() => {
     getMarkers();
@@ -85,7 +71,7 @@ export default function Toolbar() {
                           Pokaż w Google Maps
                         </a>
                         <button
-                          onClick={() => handlingDelete(marker.recordId)}
+                          onClick={() => removeMarker(marker.recordId)}
                           className={cx(styles.btn, 'btn btn-danger')}
                           type="button">
                           Usuń

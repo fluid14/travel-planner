@@ -4,14 +4,13 @@ import * as styles from './index.module.sass';
 import { ModalStateConsumer } from '../../context/ModalContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 
 export default function AddPointModal() {
-  const { getMarkers } = useContext(MarkersDataContext);
+  const { addNewMarker } = useContext(MarkersDataContext);
   const handleSubmit = async (values, setSubmitting, toggleState) => {
     toggleState();
-    const adding = toast.loading('Dodaje nowy punkt');
     const payload = {
       ...values,
       ...values.position
@@ -22,25 +21,7 @@ export default function AddPointModal() {
     delete payload.clickable;
     delete payload.visible;
 
-    await axios
-      .post('/api/markers', payload)
-      .then(() =>
-        toast.update(adding, {
-          render: 'Dodałeś pomyślnie nowy punkt',
-          type: 'success',
-          isLoading: false,
-          autoClose: true,
-          closeOnClick: true
-        })
-      )
-      .catch((error) =>
-        toast.update(adding, {
-          render: `Coś poszło nie tak :( [${error}]`,
-          type: 'error',
-          isLoading: false
-        })
-      )
-      .finally(() => getMarkers());
+    await addNewMarker(payload);
     setSubmitting(false);
   };
   return (

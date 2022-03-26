@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -9,7 +9,7 @@ const MarkersDataContextProvider = ({ children }) => {
 
   const getMarkers = () => {
     const getList = toast.loading('Pobieram listę punktów');
-    axios
+    return axios
       .get('/api/markers')
       .then((res) => res.data)
       .then(setMarkersData)
@@ -24,8 +24,47 @@ const MarkersDataContextProvider = ({ children }) => {
       );
   };
 
+  const removeMarker = (id) => {
+    return axios
+      .delete('/api/markers', { params: { id } })
+      .then(() => toast.success('Usunięto lokalizacje!'))
+      .catch((error) =>
+        toast.error(error, {
+          autoClose: true,
+          closeOnClick: true
+        })
+      )
+      .finally(() => getMarkers());
+  };
+
+  const addNewMarker = (payload) => {
+    const adding = toast.loading('Dodaje nowy punkt');
+    return axios
+      .post('/api/markers', payload)
+      .then(() =>
+        toast.update(adding, {
+          render: 'Dodałeś pomyślnie nowy punkt',
+          type: 'success',
+          isLoading: false,
+          autoClose: true,
+          closeOnClick: true
+        })
+      )
+      .catch((error) =>
+        toast.update(adding, {
+          render: `Coś poszło nie tak :( [${error}]`,
+          type: 'error',
+          isLoading: false,
+          autoClose: true,
+          closeOnClick: true
+        })
+      )
+      .finally(() => getMarkers());
+  };
+
   return (
-    <MarkersDataContext.Provider value={{ markersData, setMarkersData, getMarkers }}>
+    <MarkersDataContext.Provider
+      value={{ markersData, setMarkersData, getMarkers, removeMarker, addNewMarker }}>
       {children}
     </MarkersDataContext.Provider>
   );
