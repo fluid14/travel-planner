@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useContext, useEffect } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 
-export default function Toolbar({ showMarker }) {
+export default function Toolbar({ showMarker, showAllMarkers }) {
   const { markersData, setMarkersData, getMarkers, removeMarker } = useContext(MarkersDataContext);
 
   useEffect(() => {
@@ -17,6 +17,14 @@ export default function Toolbar({ showMarker }) {
       {(toolbar) => (
         <>
           <div className={cx(styles.toolbarWrap, { [styles.active]: toolbar.state })}>
+            <div className="d-flex justify-content-end mb-2">
+              <button
+                type="button"
+                onClick={() => showAllMarkers(markersData)}
+                className="btn btn-primary">
+                Pokaż wszystkie
+              </button>
+            </div>
             <div className={cx(styles.pointsWrap, 'accordion')} id="points">
               {markersData?.map((marker) => (
                 <div key={marker.id} className={cx(styles.bar, 'accordion-item')}>
@@ -58,6 +66,11 @@ export default function Toolbar({ showMarker }) {
                       {marker.description && (
                         <p className={cx(styles.info)}>
                           <span>Opis:</span> {marker.description}
+                        </p>
+                      )}
+                      {marker.description && (
+                        <p className={cx(styles.info)}>
+                          <span>Informacje o rezerwacji:</span> {marker.reservationInfo}
                         </p>
                       )}
                       <div className={cx(styles.buttons)}>

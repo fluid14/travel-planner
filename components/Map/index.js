@@ -45,9 +45,10 @@ export default function Map() {
         .getElementById('addMarkerButton')
         .setAttribute('data-value', JSON.stringify({ ...markerTemp, map: null }));
 
-      document
-        .getElementById('removeMarkerButton')
-        .setAttribute('data-value', JSON.stringify({ ...markerTemp }));
+      if (!addToList)
+        document
+          .getElementById('removeMarkerButton')
+          .setAttribute('data-value', JSON.stringify({ ...markerTemp }));
 
       new google.maps.InfoWindow({
         content:
@@ -85,6 +86,10 @@ export default function Map() {
     const marker = JSON.parse(e.nativeEvent.srcElement.dataset.value);
     const removeMarker = markers.filter((item) => item.placeId === marker.placeId)[0];
     removeMarker.setMap(null);
+  };
+
+  const showAllMarkers = (markersData) => {
+    markersData.forEach((marker) => showMarker(marker));
   };
 
   useEffect(() => {
@@ -175,7 +180,7 @@ export default function Map() {
           </button>
         ))}
       </div>
-      <Toolbar showMarker={showMarker} />
+      <Toolbar showMarker={showMarker} showAllMarkers={showAllMarkers} />
       <ModalStateConsumer>
         {({ toggleState }) => (
           <>

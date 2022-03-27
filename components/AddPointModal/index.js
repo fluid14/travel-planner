@@ -44,7 +44,8 @@ export default function AddPointModal() {
                     enableReinitialize={true}
                     initialValues={{
                       ...pointData,
-                      description: ''
+                      description: '-',
+                      reservationInfo: '-'
                     }}
                     onSubmit={async (values, { setSubmitting }) =>
                       handleSubmit(values, setSubmitting, toggleState)
@@ -91,6 +92,20 @@ export default function AddPointModal() {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.description}
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="description" className="form-label">
+                            Informacje o rezerwacji
+                          </label>
+                          <textarea
+                            className="form-control"
+                            id="reservationInfo"
+                            name="reservationInfo"
+                            rows="5"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.reservationInfo}
                           />
                         </div>
                         <div className={cx(styles.buttonsWrap)}>
