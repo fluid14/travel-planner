@@ -6,7 +6,6 @@ import { points as mapPoints, pointsEnum } from './points';
 import cx from 'classnames';
 import ShowToolbarButton from '../Toolbar/ShowToolbarButton';
 import { ModalStateConsumer } from '../../context/ModalContext';
-import { MarkersDataContext } from '../../context/MarkersDataContext';
 import Toolbar from '../Toolbar';
 
 export default function Map() {
@@ -14,6 +13,7 @@ export default function Map() {
   const points = { metro: false, poi: false };
   let mapStyles = [];
   let map;
+  let markers = [];
 
   const mapOptions = {
     center: {
@@ -37,13 +37,17 @@ export default function Map() {
     map.setOptions({ styles: mapStyles });
   };
 
-  const markerEvent = (google, marker, markerTemp) => {
+  const markerEvent = (google, marker, markerTemp, addToList = true) => {
     google.maps.event.addListener(marker, 'click', function (e) {
       e.preventDefault;
 
       document
-        .getElementById('actionButton')
+        .getElementById('addMarkerButton')
         .setAttribute('data-value', JSON.stringify({ ...markerTemp, map: null }));
+
+      document
+        .getElementById('removeMarkerButton')
+        .setAttribute('data-value', JSON.stringify({ ...markerTemp }));
 
       new google.maps.InfoWindow({
         content:
@@ -52,7 +56,10 @@ export default function Map() {
           `<p><span>Oceny: </span>${marker?.rating}/${marker?.totalRatings}</p>` +
           `<p><span>Poziom cenowy: </span>${marker?.priceLevel}</p>` +
           `<a href="https://www.google.com/maps/place/?q=place_id:${marker?.placeId}" target="_blank" class="btn btn-primary">Pokaż w Google Maps</a>` +
-          `<button class="btn btn-primary" type="button" onclick="document.getElementById('actionButton').click();">Dodaj do list</button>`
+          (addToList &&
+            `<button class="btn btn-primary" type="button" onclick="document.getElementById('addMarkerButton').click();" >Dodaj do list</button>`) +
+          (!addToList &&
+            `<button class="btn btn-primary" type="button" onClick="document.getElementById('removeMarkerButton').click();">Schowaj marker</button>`)
       }).open({
         anchor: marker,
         map,
@@ -61,16 +68,23 @@ export default function Map() {
     });
   };
 
-  const showMarker = (marker) => {
-    const markerTemp = new google.maps.Marker({
-      ...marker,
+  const showMarker = (markerTemp) => {
+    const marker = new google.maps.Marker({
+      ...markerTemp,
       position: {
-        lat: marker.lat,
-        lng: marker.lng
+        lat: markerTemp.lat,
+        lng: markerTemp.lng
       }
     });
-    console.log(markerTemp);
-    markerTemp.setMap(map);
+    marker.setMap(map);
+    markers.push(marker);
+    markerEvent(google, marker, markerTemp, false);
+  };
+
+  const removeMarker = (e) => {
+    const marker = JSON.parse(e.nativeEvent.srcElement.dataset.value);
+    const removeMarker = markers.filter((item) => item.placeId === marker.placeId)[0];
+    removeMarker.setMap(null);
   };
 
   useEffect(() => {
@@ -91,7 +105,6 @@ export default function Map() {
         searchBox.setBounds(map.getBounds());
       });
 
-      let markers = [];
       searchBox.addListener('places_changed', () => {
         const places = searchBox.getPlaces();
 
@@ -165,7 +178,10 @@ export default function Map() {
       <Toolbar showMarker={showMarker} />
       <ModalStateConsumer>
         {({ toggleState }) => (
-          <button id="actionButton" type="button" onClick={(e) => toggleState(e)} />
+          <>
+            <button id="addMarkerButton" type="button" onClick={(e) => toggleState(e)} />
+            <button id="removeMarkerButton" type="button" onClick={(e) => removeMarker(e)} />
+          </>
         )}
       </ModalStateConsumer>
     </div>
