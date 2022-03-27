@@ -80,7 +80,8 @@ export default function Map() {
     marker.setMap(map);
     markers.push(marker);
     markerEvent(google, marker, markerTemp, false);
-    setShowMarkerFlag(() => true);
+    if (!showAllMarkers) setShowMarkerFlag(() => true);
+    map.panTo({ lat: marker.position.lat(), lng: marker.position.lng() });
   };
 
   const removeMarker = (e) => {
