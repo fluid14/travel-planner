@@ -6,6 +6,7 @@ const MarkersDataContext = createContext(null);
 
 const MarkersDataContextProvider = ({ children }) => {
   const [markersData, setMarkersData] = useState();
+  const [showAllMarkers, setShowAllMarkers] = useState(false);
 
   const getMarkers = () => {
     const getList = toast.loading('Pobieram listę punktów');
@@ -64,7 +65,15 @@ const MarkersDataContextProvider = ({ children }) => {
 
   return (
     <MarkersDataContext.Provider
-      value={{ markersData, setMarkersData, getMarkers, removeMarker, addNewMarker }}>
+      value={{
+        markersData,
+        setMarkersData,
+        getMarkers,
+        removeMarker,
+        addNewMarker,
+        showAllMarkers,
+        setShowAllMarkers
+      }}>
       {children}
     </MarkersDataContext.Provider>
   );

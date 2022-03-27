@@ -69,7 +69,7 @@ export default function Map() {
     });
   };
 
-  const showMarker = (markerTemp) => {
+  const showMarker = (markerTemp, setShowMarkerFlag) => {
     const marker = new google.maps.Marker({
       ...markerTemp,
       position: {
@@ -80,6 +80,7 @@ export default function Map() {
     marker.setMap(map);
     markers.push(marker);
     markerEvent(google, marker, markerTemp, false);
+    setShowMarkerFlag(() => true);
   };
 
   const removeMarker = (e) => {
@@ -88,8 +89,11 @@ export default function Map() {
     removeMarker.setMap(null);
   };
 
-  const showAllMarkers = (markersData) => {
-    markersData.forEach((marker) => showMarker(marker));
+  const showAllMarkers = (showAllMarkersFlag, setShowAllMarkersFlag, markersData) => {
+    !showAllMarkersFlag
+      ? markersData.forEach((marker) => showMarker(marker))
+      : markers.forEach((removeMarker) => removeMarker.setMap(null));
+    setShowAllMarkersFlag((prev) => !prev);
   };
 
   useEffect(() => {
