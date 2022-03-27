@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useContext, useEffect } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 
-export default function Toolbar() {
+export default function Toolbar({ showMarker }) {
   const { markersData, setMarkersData, getMarkers, removeMarker } = useContext(MarkersDataContext);
 
   useEffect(() => {
@@ -61,7 +61,10 @@ export default function Toolbar() {
                         </p>
                       )}
                       <div className={cx(styles.buttons)}>
-                        <button className={cx(styles.btn, 'btn btn-primary')} type="button">
+                        <button
+                          onClick={() => showMarker(marker)}
+                          className={cx(styles.btn, 'btn btn-primary')}
+                          type="button">
                           Pokaż
                         </button>
                         <a

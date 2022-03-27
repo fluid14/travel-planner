@@ -1,3 +1,4 @@
+import React from 'react';
 import { useContext, useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import * as styles from './index.module.sass';
@@ -6,9 +7,9 @@ import cx from 'classnames';
 import ShowToolbarButton from '../Toolbar/ShowToolbarButton';
 import { ModalStateConsumer } from '../../context/ModalContext';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
+import Toolbar from '../Toolbar';
 
 export default function Map() {
-  const { markersData, setMarkersData } = useContext(MarkersDataContext);
   const googleMap = useRef(null);
   const points = { metro: false, poi: false };
   let mapStyles = [];
@@ -58,6 +59,18 @@ export default function Map() {
         shouldFocus: false
       });
     });
+  };
+
+  const showMarker = (marker) => {
+    const markerTemp = new google.maps.Marker({
+      ...marker,
+      position: {
+        lat: marker.lat,
+        lng: marker.lng
+      }
+    });
+    console.log(markerTemp);
+    markerTemp.setMap(map);
   };
 
   useEffect(() => {
@@ -125,7 +138,7 @@ export default function Map() {
         map.fitBounds(bounds);
       });
     });
-  }, setMarkersData);
+  }, [showMarker, map]);
 
   return (
     <div className={styles.mapWrap}>
@@ -149,6 +162,7 @@ export default function Map() {
           </button>
         ))}
       </div>
+      <Toolbar showMarker={showMarker} />
       <ModalStateConsumer>
         {({ toggleState }) => (
           <button id="actionButton" type="button" onClick={(e) => toggleState(e)} />
