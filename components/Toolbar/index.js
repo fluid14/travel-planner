@@ -1,9 +1,10 @@
 import * as styles from './index.module.sass';
-import { ToolbarStateConsumer } from '../../context/ToolbarContext';
+import ToolbarStateProvider, { ToolbarStateConsumer } from '../../context/ToolbarContext';
 import cx from 'classnames';
 import axios from 'axios';
 import { useContext, useEffect } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
+import ShowToolbarButton from './ShowToolbarButton';
 
 export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMap }) {
   const {
@@ -21,13 +22,17 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
 
   return (
     <ToolbarStateConsumer>
-      {(toolbar) => (
+      {({ state, toggleState }) => (
         <>
-          <div className={cx(styles.toolbarWrap, { [styles.active]: toolbar.state })}>
-            <div className="d-flex justify-content-end mb-2">
+          <div className={cx(styles.toolbarWrap, { [styles.active]: state })}>
+            <div className="d-flex justify-content-between mb-3">
+              <ShowToolbarButton positionStatic>Schowaj</ShowToolbarButton>
               <button
                 type="button"
-                onClick={() => showAllMarkersOnMap(showAllMarkers, setShowAllMarkers, markersData)}
+                onClick={() => {
+                  showAllMarkersOnMap(showAllMarkers, setShowAllMarkers, markersData);
+                  toggleState();
+                }}
                 className="btn btn-primary">
                 {!showAllMarkers ? 'Pokaż wszystkie' : 'Ukryj wszystkie'}
               </button>
@@ -97,7 +102,10 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                       )}
                       <div className={cx(styles.buttons)}>
                         <button
-                          onClick={() => showMarker(marker, setShowAllMarkers)}
+                          onClick={() => {
+                            showMarker(marker, setShowAllMarkers);
+                            toggleState();
+                          }}
                           className={cx(styles.btn, 'btn btn-primary')}
                           type="button">
                           Pokaż
@@ -109,7 +117,10 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                           Pokaż w Google Maps
                         </a>
                         <button
-                          onClick={() => removeMarker(marker.recordId)}
+                          onClick={() => {
+                            removeMarker(marker.recordId);
+                            toggleState();
+                          }}
                           className={cx(styles.btn, 'btn btn-danger')}
                           type="button">
                           Usuń

@@ -1,5 +1,14 @@
 .btn
   position: absolute
   top: 100px
-  left: 50px
-  z-index: 99
+  left: 40px
+  z-index: 9
+
+  &.static
+    position: unset
+    margin-right: 10px
+
+@media screen and (max-width: 992px)
+  .btn
+    top: 80px
+    left: 20px
