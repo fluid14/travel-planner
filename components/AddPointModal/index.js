@@ -2,12 +2,17 @@ import { Form, Formik } from 'formik';
 import cx from 'classnames';
 import * as styles from './index.module.sass';
 import { ModalStateConsumer } from '../../context/ModalContext';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
-import { TextEditor } from '../TextEditor';
+import TextEditor from '../TextEditor';
 
 export default function AddPointModal() {
   const { addNewMarker } = useContext(MarkersDataContext);
+  const [editorLoaded, setEditorLoaded] = useState(false);
+  useEffect(() => {
+    setEditorLoaded(true);
+  }, []);
+
   const handleSubmit = async (values, setSubmitting, toggleState) => {
     toggleState();
     const payload = {
@@ -93,8 +98,11 @@ export default function AddPointModal() {
                             Opis
                           </label>
                           <TextEditor
-                            setFieldValue={(val) => setFieldValue('description', val)}
-                            value={values.description}
+                            name="description"
+                            onChange={(data) => {
+                              setFieldValue('description', data);
+                            }}
+                            editorLoaded={editorLoaded}
                           />
                         </div>
                         <div className="mb-3">
@@ -102,8 +110,11 @@ export default function AddPointModal() {
                             Informacje o rezerwacji
                           </label>
                           <TextEditor
-                            setFieldValue={(val) => setFieldValue('reservationInfo', val)}
-                            value={values.reservationInfo}
+                            name="reservationInfo"
+                            onChange={(data) => {
+                              setFieldValue('reservationInfo', data);
+                            }}
+                            editorLoaded={editorLoaded}
                           />
                         </div>
                         <div className={cx(styles.buttonsWrap)}>

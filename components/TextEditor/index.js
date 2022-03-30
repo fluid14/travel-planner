@@ -1,36 +1,34 @@
-import React, { useState } from 'react';
-import { convertToRaw, EditorState } from 'draft-js';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import dynamic from 'next/dynamic';
-const Editor = dynamic(() => import('react-draft-wysiwyg').then((mod) => mod.Editor), {
-  ssr: false
-});
+import React, { useEffect, useRef } from 'react';
 
-export const TextEditor = ({ setFieldValue }) => {
-  const draftToHtml = typeof window === 'object' && require('draftjs-to-html');
+function TextEditor({ onChange, editorLoaded, name, value }) {
+  const editorRef = useRef();
+  const { CKEditor, ClassicEditor } = editorRef.current || {};
 
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  useEffect(() => {
+    editorRef.current = {
+      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor, // v3+
+      ClassicEditor: require('@ckeditor/ckeditor5-build-classic')
+    };
+  }, []);
 
-  const onEditorStateChange = (editorState) => {
-    const forFormik = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    setFieldValue(forFormik);
-    setEditorState(editorState);
-  };
   return (
     <div>
-      <Editor
-        editorState={editorState}
-        wrapperClassName="custom-wrapper"
-        editorClassName="custom-editor"
-        onEditorStateChange={onEditorStateChange}
-        toolbar={{
-          options: ['inline', 'list']
-          // inline: { inDropdown: true },
-          // list: { inDropdown: true },
-          // textAlign: { inDropdown: true },
-        }}
-        editorStyle={{ fontSize: 14 }}
-      />
+      {editorLoaded ? (
+        <CKEditor
+          type=""
+          name={name}
+          editor={ClassicEditor}
+          data={value}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            onChange(data);
+          }}
+        />
+      ) : (
+        <div>Editor loading</div>
+      )}
     </div>
   );
-};
+}
+
+export default TextEditor;
