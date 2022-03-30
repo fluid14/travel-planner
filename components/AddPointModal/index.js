@@ -61,7 +61,7 @@ export default function AddPointModal() {
                     }) => (
                       <Form className="d-flex flex-column" onSubmit={handleSubmit}>
                         <div className="mb-3">
-                          <label htmlFor="title" className="form-label">
+                          <label htmlFor="title" className="form-label fw-bold">
                             Tytuł
                           </label>
                           <input
@@ -75,7 +75,7 @@ export default function AddPointModal() {
                           />
                         </div>
                         <div className="mb-3">
-                          <label htmlFor="address" className="form-label">
+                          <label htmlFor="address" className="form-label fw-bold">
                             Adres
                           </label>
                           <input
@@ -89,7 +89,7 @@ export default function AddPointModal() {
                           />
                         </div>
                         <div className="mb-3">
-                          <label htmlFor="description" className="form-label">
+                          <label htmlFor="description" className="form-label fw-bold">
                             Opis
                           </label>
                           <TextEditor
@@ -98,7 +98,7 @@ export default function AddPointModal() {
                           />
                         </div>
                         <div className="mb-3">
-                          <label htmlFor="description" className="form-label">
+                          <label htmlFor="description" className="form-label fw-bold">
                             Informacje o rezerwacji
                           </label>
                           <TextEditor

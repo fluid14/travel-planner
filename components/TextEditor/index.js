@@ -6,7 +6,7 @@ const Editor = dynamic(() => import('react-draft-wysiwyg').then((mod) => mod.Edi
   ssr: false
 });
 
-export const TextEditor = ({ value, setFieldValue }) => {
+export const TextEditor = ({ setFieldValue }) => {
   const draftToHtml = typeof window === 'object' && require('draftjs-to-html');
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -23,6 +23,13 @@ export const TextEditor = ({ value, setFieldValue }) => {
         wrapperClassName="custom-wrapper"
         editorClassName="custom-editor"
         onEditorStateChange={onEditorStateChange}
+        toolbar={{
+          options: ['inline', 'list']
+          // inline: { inDropdown: true },
+          // list: { inDropdown: true },
+          // textAlign: { inDropdown: true },
+        }}
+        editorStyle={{ fontSize: 14 }}
       />
     </div>
   );

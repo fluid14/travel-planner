@@ -21,14 +21,23 @@ $borderRadius: 20px
   .pointsWrap
     .body
       .info
+        display: flex
+        align-items: flex-start
+        alignment: center
+        font-size: 16px
         margin-bottom: 5px
+
+        &.infoPriceLevel
+          align-items: center
 
         span
           font-weight: bold
+          margin-right: 10px
 
           &.mini
             font-size: 12px
             font-weight: unset
+            margin-left: 5px
 
       .buttons
         display: flex
@@ -37,6 +46,29 @@ $borderRadius: 20px
 
         .btn
           margin-left: 10px
+
+      .priceLevel
+        display: inline-block
+        width: 15px
+        height: 15px
+        border-radius: 100%
+
+        &.free
+          background-color: #7bed9f
+
+        &.inexpensive
+          background-color: #2ed573
+
+        &.moderate
+          background-color: #eccc68
+
+        &.expensive
+          background-color: #ff6b6b
+
+        &.veryExpensive
+          background-color: #b71540
+
+
 
 
 

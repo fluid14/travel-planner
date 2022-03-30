@@ -66,19 +66,34 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                         </p>
                       )}
                       {marker.priceLevel && (
-                        <p className={cx(styles.info)}>
-                          <span>Poziom cenowy:</span> {marker.priceLevel}
+                        <p className={cx(styles.info, styles.infoPriceLevel)}>
+                          <span>Poziom cenowy </span>
+                          <span
+                            className={cx(styles.priceLevel, {
+                              [styles.free]: marker.priceLevel === 0,
+                              [styles.inexpensive]: marker.priceLevel === 1,
+                              [styles.moderate]: marker.priceLevel === 2,
+                              [styles.expensive]: marker.priceLevel === 3,
+                              [styles.veryExpensive]: marker.priceLevel === 4
+                            })}
+                          />
                         </p>
                       )}
                       {marker.description && (
-                        <p className={cx(styles.info)}>
-                          <span>Opis:</span> {marker.description}
-                        </p>
+                        <>
+                          <p className={cx(styles.info)}>
+                            <span>Opis:</span>
+                          </p>
+                          <div dangerouslySetInnerHTML={{ __html: marker.description }} />
+                        </>
                       )}
                       {marker.description && (
-                        <p className={cx(styles.info)}>
-                          <span>Informacje o rezerwacji:</span> {marker.reservationInfo}
-                        </p>
+                        <>
+                          <p className={cx(styles.info)}>
+                            <span>Informacje o rezerwacji:</span>
+                          </p>
+                          <div dangerouslySetInnerHTML={{ __html: marker.reservationInfo }} />
+                        </>
                       )}
                       <div className={cx(styles.buttons)}>
                         <button
