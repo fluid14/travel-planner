@@ -4,6 +4,7 @@ import * as styles from './index.module.sass';
 import { ModalStateConsumer } from '../../context/ModalContext';
 import { useContext } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
+import { TextEditor } from '../TextEditor';
 
 export default function AddPointModal() {
   const { addNewMarker } = useContext(MarkersDataContext);
@@ -50,7 +51,14 @@ export default function AddPointModal() {
                     onSubmit={async (values, { setSubmitting }) =>
                       handleSubmit(values, setSubmitting, toggleState)
                     }>
-                    {({ isSubmitting, values, handleChange, handleBlur, handleSubmit }) => (
+                    {({
+                      isSubmitting,
+                      setFieldValue,
+                      values,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit
+                    }) => (
                       <Form className="d-flex flex-column" onSubmit={handleSubmit}>
                         <div className="mb-3">
                           <label htmlFor="title" className="form-label">
@@ -84,13 +92,8 @@ export default function AddPointModal() {
                           <label htmlFor="description" className="form-label">
                             Opis
                           </label>
-                          <textarea
-                            className="form-control"
-                            id="description"
-                            name="description"
-                            rows="5"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
+                          <TextEditor
+                            setFieldValue={(val) => setFieldValue('description', val)}
                             value={values.description}
                           />
                         </div>
@@ -98,13 +101,8 @@ export default function AddPointModal() {
                           <label htmlFor="description" className="form-label">
                             Informacje o rezerwacji
                           </label>
-                          <textarea
-                            className="form-control"
-                            id="reservationInfo"
-                            name="reservationInfo"
-                            rows="5"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
+                          <TextEditor
+                            setFieldValue={(val) => setFieldValue('reservationInfo', val)}
                             value={values.reservationInfo}
                           />
                         </div>
