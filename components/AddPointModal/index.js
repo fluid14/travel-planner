@@ -7,13 +7,13 @@ import { MarkersDataContext } from '../../context/MarkersDataContext';
 import TextEditor from '../TextEditor';
 
 export default function AddPointModal() {
-  const { addNewMarker } = useContext(MarkersDataContext);
+  const { addNewMarker, editMarker } = useContext(MarkersDataContext);
   const [editorLoaded, setEditorLoaded] = useState(false);
   useEffect(() => {
     setEditorLoaded(true);
   }, []);
 
-  const handleSubmit = async (values, setSubmitting, toggleState, setFieldValue) => {
+  const handleSubmit = async (values, setSubmitting, toggleState, setFieldValue, actionType) => {
     toggleState();
     const payload = {
       ...values,
@@ -25,19 +25,21 @@ export default function AddPointModal() {
     delete payload.clickable;
     delete payload.visible;
 
-    await addNewMarker(payload);
+    (await actionType) === 'new' ? addNewMarker(payload) : editMarker(payload);
     setSubmitting(false);
     setFieldValue(null);
   };
   return (
     <ModalStateConsumer>
-      {({ state, toggleState, pointData }) => {
+      {({ state, toggleState, pointData, actionType }) => {
         return (
           <div className={cx('modal', { [styles.show]: state })}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Dodaj nowy punkt</h5>
+                  <h5 className="modal-title">
+                    {actionType === 'new' ? 'Dodaj lokalizacje' : 'Edytuj lokalizacje'}
+                  </h5>
                   <button
                     type="button"
                     className="btn-close"
@@ -51,11 +53,11 @@ export default function AddPointModal() {
                     enableReinitialize={true}
                     initialValues={{
                       ...pointData,
-                      description: '-',
-                      reservationInfo: '-'
+                      description: actionType === 'new' ? '-' : pointData.description,
+                      reservationInfo: actionType === 'new' ? '-' : pointData.reservationInfo
                     }}
                     onSubmit={async (values, { setSubmitting, setFieldValue }) =>
-                      handleSubmit(values, setSubmitting, toggleState, setFieldValue)
+                      handleSubmit(values, setSubmitting, toggleState, setFieldValue, actionType)
                     }>
                     {({
                       isSubmitting,
@@ -118,7 +120,7 @@ export default function AddPointModal() {
                         </div>
                         <div className={cx(styles.buttonsWrap)}>
                           <button type="submit" disabled={isSubmitting} className="btn btn-primary">
-                            Dodaj
+                            {actionType === 'new' ? 'Dodaj' : 'Edytuj'}
                           </button>
                           <button
                             onClick={() => toggleState(null)}

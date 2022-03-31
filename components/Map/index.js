@@ -41,6 +41,8 @@ export default function Map() {
     google.maps.event.addListener(marker, 'click', function (e) {
       e.preventDefault;
 
+      console.log(marker);
+
       document
         .getElementById('addMarkerButton')
         .setAttribute('data-value', JSON.stringify({ ...markerTemp, map: null }));

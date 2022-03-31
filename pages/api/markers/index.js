@@ -1,6 +1,7 @@
 import createMarker from '../../../services/marker/create';
 import getMarkers from '../../../services/marker/get';
 import deleteMarker from '../../../services/marker/delete';
+import updateMarker from '../../../services/marker/update';
 
 export default async (req, res) => {
   switch (req.method) {
@@ -15,6 +16,15 @@ export default async (req, res) => {
         res.status(200).json({ status: 'created', marker });
       } catch (err) {
         res.status(422).json({ status: 'not_created', err });
+      }
+      break;
+    }
+    case 'PUT': {
+      try {
+        const marker = await updateMarker(req.body);
+        res.status(200).json({ status: 'updated', marker });
+      } catch (err) {
+        res.status(422).json({ status: 'not_updated', err });
       }
       break;
     }

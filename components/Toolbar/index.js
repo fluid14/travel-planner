@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useContext, useEffect } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 import ShowToolbarButton from './ShowToolbarButton';
+import { ModalStateContext } from '../../context/ModalContext';
 
 export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMap }) {
   const {
@@ -16,9 +17,19 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
     setShowAllMarkers
   } = useContext(MarkersDataContext);
 
+  const { toggleState } = useContext(ModalStateContext);
+
   useEffect(() => {
     getMarkers();
   }, [axios, setMarkersData]);
+
+  const updateMarker = (marker) => {
+    document
+      .getElementById('addMarkerButton')
+      .setAttribute('data-value', JSON.stringify({ ...marker, map: null }));
+
+    toggleState(marker, true);
+  };
 
   return (
     <ToolbarStateConsumer>
@@ -113,9 +124,18 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                         <a
                           href={`https://www.google.com/maps/place/?q=place_id:${marker?.placeId}`}
                           target="_blank"
-                          className={cx(styles.btn, 'btn btn-primary')}>
-                          Pokaż w Google Maps
+                          className={cx(styles.btn, 'btn btn-secondary')}>
+                          Google Maps
                         </a>
+                        <button
+                          onClick={() => {
+                            updateMarker(marker);
+                            toggleState();
+                          }}
+                          className={cx(styles.btn, 'btn btn-primary')}
+                          type="button">
+                          Edytuj
+                        </button>
                         <button
                           onClick={() => {
                             removeMarker(marker.recordId);

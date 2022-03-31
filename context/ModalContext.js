@@ -8,10 +8,13 @@ const ModalStateContext = React.createContext('');
 export default function ModalStateProvider({ children }) {
   const [state, setState] = useState(false);
   const [pointData, setPointData] = useState({ title: '', address: '', position: '' });
+  const [actionType, setActionType] = useState('new');
 
-  const toggleState = (e) => {
+  const toggleState = (marker, edit = false) => {
     setState((prevState) => !prevState);
-    if (e) setPointData(() => JSON.parse(e.nativeEvent.srcElement.dataset.value));
+    setActionType(edit ? 'edit' : 'new');
+    if (marker)
+      setPointData(() => (edit ? marker : JSON.parse(marker.nativeEvent.srcElement.dataset.value)));
   };
 
   return (
@@ -19,7 +22,9 @@ export default function ModalStateProvider({ children }) {
       value={{
         state,
         toggleState,
-        pointData
+        pointData,
+        actionType,
+        setActionType
       }}>
       {children}
     </ModalStateContext.Provider>

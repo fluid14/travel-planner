@@ -38,6 +38,19 @@ const MarkersDataContextProvider = ({ children }) => {
       .finally(() => getMarkers());
   };
 
+  const editMarker = (payload) => {
+    return axios
+      .put('/api/markers', { ...payload })
+      .then(() => toast.success('Zaktualizowano lokalizacje!'))
+      .catch((error) =>
+        toast.error(error, {
+          autoClose: true,
+          closeOnClick: true
+        })
+      )
+      .finally(() => getMarkers());
+  };
+
   const addNewMarker = (payload) => {
     const adding = toast.loading('Dodaje nowy punkt');
     return axios
@@ -70,6 +83,7 @@ const MarkersDataContextProvider = ({ children }) => {
         setMarkersData,
         getMarkers,
         removeMarker,
+        editMarker,
         addNewMarker,
         showAllMarkers,
         setShowAllMarkers
