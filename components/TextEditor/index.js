@@ -11,6 +11,22 @@ function TextEditor({ onChange, editorLoaded, name, value }) {
     };
   }, []);
 
+  const editorConfiguration = {
+    toolbar: [
+      'bold',
+      'italic',
+      '|',
+      'link',
+      '|',
+      'numberedList',
+      'bulletedList',
+      '|',
+      'undo',
+      'redo'
+    ],
+    fontSize: { value: 14 }
+  };
+
   return (
     <div>
       {editorLoaded ? (
@@ -19,10 +35,8 @@ function TextEditor({ onChange, editorLoaded, name, value }) {
           name={name}
           editor={ClassicEditor}
           data={value}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            onChange(data);
-          }}
+          onChange={(event, editor) => onChange(editor.getData())}
+          config={editorConfiguration}
         />
       ) : (
         <div>Editor loading</div>

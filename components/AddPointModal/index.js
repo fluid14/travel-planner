@@ -13,7 +13,7 @@ export default function AddPointModal() {
     setEditorLoaded(true);
   }, []);
 
-  const handleSubmit = async (values, setSubmitting, toggleState) => {
+  const handleSubmit = async (values, setSubmitting, toggleState, setFieldValue) => {
     toggleState();
     const payload = {
       ...values,
@@ -27,6 +27,7 @@ export default function AddPointModal() {
 
     await addNewMarker(payload);
     setSubmitting(false);
+    setFieldValue(null);
   };
   return (
     <ModalStateConsumer>
@@ -53,8 +54,8 @@ export default function AddPointModal() {
                       description: '-',
                       reservationInfo: '-'
                     }}
-                    onSubmit={async (values, { setSubmitting }) =>
-                      handleSubmit(values, setSubmitting, toggleState)
+                    onSubmit={async (values, { setSubmitting, setFieldValue }) =>
+                      handleSubmit(values, setSubmitting, toggleState, setFieldValue)
                     }>
                     {({
                       isSubmitting,
@@ -99,10 +100,9 @@ export default function AddPointModal() {
                           </label>
                           <TextEditor
                             name="description"
-                            onChange={(data) => {
-                              setFieldValue('description', data);
-                            }}
+                            onChange={(data) => setFieldValue('description', data)}
                             editorLoaded={editorLoaded}
+                            value={values.description}
                           />
                         </div>
                         <div className="mb-3">
@@ -111,10 +111,9 @@ export default function AddPointModal() {
                           </label>
                           <TextEditor
                             name="reservationInfo"
-                            onChange={(data) => {
-                              setFieldValue('reservationInfo', data);
-                            }}
+                            onChange={(data) => setFieldValue('reservationInfo', data)}
                             editorLoaded={editorLoaded}
+                            value={values.reservationInfo}
                           />
                         </div>
                         <div className={cx(styles.buttonsWrap)}>
