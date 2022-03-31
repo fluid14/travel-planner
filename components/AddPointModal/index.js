@@ -5,9 +5,11 @@ import { ModalStateConsumer } from '../../context/ModalContext';
 import { useContext, useEffect, useState } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 import TextEditor from '../TextEditor';
+import { ToolbarStateContext } from '../../context/ToolbarContext';
 
 export default function AddPointModal() {
   const { addNewMarker, editMarker } = useContext(MarkersDataContext);
+  const { toggleState: toolbarToggleState } = useContext(ToolbarStateContext);
   const [editorLoaded, setEditorLoaded] = useState(false);
   useEffect(() => {
     setEditorLoaded(true);
@@ -25,7 +27,9 @@ export default function AddPointModal() {
     delete payload.clickable;
     delete payload.visible;
 
-    (await actionType) === 'new' ? addNewMarker(payload) : editMarker(payload);
+    (await actionType) === 'new'
+      ? addNewMarker(payload)
+      : editMarker(payload).then(() => toolbarToggleState());
     setSubmitting(false);
     setFieldValue(null);
   };

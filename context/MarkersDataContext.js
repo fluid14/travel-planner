@@ -1,6 +1,7 @@
-import { createContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { ToolbarStateContext } from './ToolbarContext';
 
 const MarkersDataContext = createContext(null);
 
@@ -39,9 +40,18 @@ const MarkersDataContextProvider = ({ children }) => {
   };
 
   const editMarker = (payload) => {
+    const edit = toast.loading('Edytuje punkt');
     return axios
       .put('/api/markers', { ...payload })
-      .then(() => toast.success('Zaktualizowano lokalizacje!'))
+      .then(() =>
+        toast.update(edit, {
+          render: 'Zedytowałeś punkt!',
+          type: 'success',
+          isLoading: false,
+          autoClose: true,
+          closeOnClick: true
+        })
+      )
       .catch((error) =>
         toast.error(error, {
           autoClose: true,

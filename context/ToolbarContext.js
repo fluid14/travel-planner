@@ -29,4 +29,4 @@ ToolbarStateConsumer.propTypes = {
   children: PropTypes.any.isRequired
 };
 
-export { ToolbarStateProvider, ToolbarStateConsumer };
+export { ToolbarStateProvider, ToolbarStateConsumer, ToolbarStateContext };
