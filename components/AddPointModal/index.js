@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from 'react';
 import { MarkersDataContext } from '../../context/MarkersDataContext';
 import TextEditor from '../TextEditor';
 import { ToolbarStateContext } from '../../context/ToolbarContext';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.min.css';
 
 export default function AddPointModal() {
   const { addNewMarker, editMarker } = useContext(MarkersDataContext);
@@ -120,6 +122,18 @@ export default function AddPointModal() {
                             onChange={(data) => setFieldValue('reservationInfo', data)}
                             editorLoaded={editorLoaded}
                             value={values.reservationInfo}
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="description" className="form-label fw-bold">
+                            Planowana wizyta
+                          </label>
+                          <DatePicker
+                            className="form-control"
+                            selected={new Date(values.visitDate || new Date())}
+                            dateFormat="dd.MM.yyyy"
+                            locale="pl-PL"
+                            onChange={(data) => setFieldValue('visitDate', data)}
                           />
                         </div>
                         <div className={cx(styles.buttonsWrap)}>

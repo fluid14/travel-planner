@@ -11,10 +11,12 @@ const schema = Joi.object({
   priceLevel: Joi.number(),
   rating: Joi.number(),
   totalRatings: Joi.number(),
-  reservationInfo: Joi.string()
+  reservationInfo: Joi.string(),
+  visitDate: Joi.string()
 });
 
 export default async (payload) => {
+  console.log(payload);
   const validateMarker = await schema.validateAsync(payload);
   return await airDB('points').create([
     {

@@ -11,7 +11,8 @@ export default async (payload) => {
     description,
     rating,
     address,
-    recordId
+    recordId,
+    visitDate
   } = payload;
   return await airDB('points').update([
     {
@@ -25,7 +26,8 @@ export default async (payload) => {
         lng,
         description,
         rating,
-        address
+        address,
+        visitDate
       }
     }
   ]);
