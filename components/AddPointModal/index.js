@@ -136,6 +136,15 @@ export default function AddPointModal() {
                             onChange={(data) => setFieldValue('visitDate', data)}
                           />
                         </div>
+                        <div className="mb-3">
+                          <label htmlFor="category" className="form-label fw-bold">
+                            Kategoria
+                          </label>
+                          <select name="category" id="category" class="form-select">
+                            <option value="attraction">Atrakcja</option>
+                            <option value="food">Żarcie</option>
+                          </select>
+                        </div>
                         <div className={cx(styles.buttonsWrap)}>
                           <button type="submit" disabled={isSubmitting} className="btn btn-primary">
                             {actionType === 'new' ? 'Dodaj' : 'Edytuj'}

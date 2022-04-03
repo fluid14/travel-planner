@@ -105,7 +105,9 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                           className={cx(styles.dateTitle, {
                             [styles.today]: markers.date === moment(new Date()).format('DD.MM.YYYY')
                           })}>
-                          {`${markers.date} ${moment(markers.date).locale('pl').format('dddd')}`}
+                          {markers.date === 'undefined'
+                            ? 'Nie przydzielono'
+                            : `${markers.date} ${moment(markers.date).locale('pl').format('dddd')}`}
                         </p>
                         <button
                           type="button"
