@@ -8,6 +8,7 @@ import ShowToolbarButton from './ShowToolbarButton';
 import moment from 'moment';
 import { removeDuplicateFromArray } from '../../utils';
 import Marker from './Marker';
+import 'moment/locale/pl.js';
 
 export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMap }) {
   const { markersData, setMarkersData, getMarkers, showAllMarkers, setShowAllMarkers } =
@@ -48,8 +49,8 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
       temp.push({ date: key, value });
     }
 
+    temp.sort((a, b) => moment(b.date) - moment(a.date)).reverse();
     setMarkersByDate(temp);
-    console.log(markersByDate);
   };
 
   return (
@@ -84,6 +85,27 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                       showMarker={showMarker}
                       toggleState={toggleState}
                     />
+                  );
+                })}
+              {markersByDate &&
+                markersByDate?.map((markers) => {
+                  return (
+                    <div key={markers.date}>
+                      <p
+                        className={cx(styles.dateTitle, {
+                          [styles.today]: markers.date === moment(new Date()).format('DD.MM.YYYY')
+                        })}>
+                        {`${markers.date} ${moment(markers.date).locale('pl').format('dddd')}`}
+                      </p>
+                      {markers.value.map((marker) => (
+                        <Marker
+                          key={marker.id}
+                          marker={marker}
+                          showMarker={showMarker}
+                          toggleState={toggleState}
+                        />
+                      ))}
+                    </div>
                   );
                 })}
             </div>

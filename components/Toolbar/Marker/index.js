@@ -4,12 +4,12 @@ import { useContext } from 'react';
 import { MarkersDataContext } from '../../../context/MarkersDataContext';
 import { ModalStateContext } from '../../../context/ModalContext';
 import { ToolbarStateConsumer } from '../../../context/ToolbarContext';
+import moment from 'moment';
+import 'moment/locale/pl';
 
 const Marker = ({ marker, showMarker }) => {
   const { removeMarker, setShowAllMarkers } = useContext(MarkersDataContext);
   const { toggleState } = useContext(ModalStateContext);
-
-  const visitDate = new Date(marker.visitDate);
 
   const updateMarker = (marker) => {
     document
@@ -85,9 +85,9 @@ const Marker = ({ marker, showMarker }) => {
                 <>
                   <p className={cx(styles.info)}>
                     <span>Planowana wizyta:</span>
-                    {`${visitDate.toLocaleDateString('pl-PL', {
-                      weekday: 'long'
-                    })} ${visitDate.getDate()}.${visitDate.getMonth()}.${visitDate.getFullYear()}`}
+                    {`${moment(marker.visitDate).locale('pl-PL').format('dddd')} ${moment(
+                      marker.visitDate
+                    ).format('DD.MM.YYYY')}`}
                   </p>
                 </>
               )}
