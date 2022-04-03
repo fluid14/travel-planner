@@ -90,7 +90,17 @@ export default function Map() {
     removeMarker.setMap(null);
   };
 
-  const showAllMarkers = (showAllMarkersFlag, setShowAllMarkersFlag, markersData) => {
+  const showAllMarkers = (
+    showAllMarkersFlag,
+    setShowAllMarkersFlag,
+    markersData,
+    removePrev = false
+  ) => {
+    if (removePrev) {
+      markers.forEach((removeMarker) => removeMarker.setMap(null));
+      setShowAllMarkersFlag((prev) => !prev);
+    }
+
     !showAllMarkersFlag
       ? markersData.forEach((marker) => showMarker(marker))
       : markers.forEach((removeMarker) => removeMarker.setMap(null));

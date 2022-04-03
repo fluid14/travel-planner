@@ -85,7 +85,7 @@ const Marker = ({ marker, showMarker }) => {
                 <>
                   <p className={cx(styles.info)}>
                     <span>Planowana wizyta:</span>
-                    {`${moment(marker.visitDate).locale('pl-PL').format('dddd')} ${moment(
+                    {`${moment(marker.visitDate).locale('pl').format('dddd')} ${moment(
                       marker.visitDate
                     ).format('DD.MM.YYYY')}`}
                   </p>

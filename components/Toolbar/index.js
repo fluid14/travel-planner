@@ -53,6 +53,8 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
     setMarkersByDate(temp);
   };
 
+  const removeSortByDate = () => setMarkersByDate(null);
+
   return (
     <ToolbarStateConsumer>
       {({ state, toggleState }) => (
@@ -70,8 +72,11 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                   className="btn btn-primary mb-2">
                   {!showAllMarkers ? 'Pokaż wszystkie' : 'Ukryj wszystkie'}
                 </button>
-                <button type="button" className="btn btn-primary" onClick={sortByDate}>
-                  Posortuj według dat
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => (!markersByDate ? sortByDate() : removeSortByDate())}>
+                  {!markersByDate ? 'Posortuj według dat' : 'Usuń sortowanie'}
                 </button>
               </div>
             </div>
@@ -91,12 +96,32 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                 markersByDate?.map((markers) => {
                   return (
                     <div key={markers.date}>
-                      <p
-                        className={cx(styles.dateTitle, {
-                          [styles.today]: markers.date === moment(new Date()).format('DD.MM.YYYY')
-                        })}>
-                        {`${markers.date} ${moment(markers.date).locale('pl').format('dddd')}`}
-                      </p>
+                      <div
+                        className={cx(
+                          styles.dataHeader,
+                          'd-flex justify-content-between align-items-end'
+                        )}>
+                        <p
+                          className={cx(styles.dateTitle, {
+                            [styles.today]: markers.date === moment(new Date()).format('DD.MM.YYYY')
+                          })}>
+                          {`${markers.date} ${moment(markers.date).locale('pl').format('dddd')}`}
+                        </p>
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm"
+                          onClick={() => {
+                            showAllMarkersOnMap(
+                              showAllMarkers,
+                              setShowAllMarkers,
+                              markers.value,
+                              true
+                            );
+                            toggleState();
+                          }}>
+                          Pokaż na mapie
+                        </button>
+                      </div>
                       {markers.value.map((marker) => (
                         <Marker
                           key={marker.id}
