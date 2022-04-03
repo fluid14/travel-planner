@@ -154,7 +154,8 @@ export default function Map() {
             priceLevel: place.price_level,
             rating: place.rating,
             totalRatings: place.user_ratings_total,
-            placeId: place.place_id
+            placeId: place.place_id,
+            icon: 'marker_google.png'
           };
 
           const marker = new google.maps.Marker(markerTemp);

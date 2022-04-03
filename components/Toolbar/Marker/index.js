@@ -6,10 +6,12 @@ import { ModalStateContext } from '../../../context/ModalContext';
 import { ToolbarStateConsumer } from '../../../context/ToolbarContext';
 import moment from 'moment';
 import 'moment/locale/pl';
+import { ConfirmModalContext } from '../../../context/ConfirmModalContext';
 
 const Marker = ({ marker, showMarker }) => {
   const { removeMarker, setShowAllMarkers } = useContext(MarkersDataContext);
   const { toggleState } = useContext(ModalStateContext);
+  const { toggleState: confirmModalState } = useContext(ConfirmModalContext);
 
   const updateMarker = (marker) => {
     document
@@ -119,6 +121,7 @@ const Marker = ({ marker, showMarker }) => {
                 <button
                   onClick={() => {
                     removeMarker(marker.recordId);
+                    // confirmModalState('Czy na pewno chcesz usunąć?', removeMarker, marker.recordId);
                     toggleState();
                   }}
                   className={cx(styles.btn, 'btn btn-danger')}

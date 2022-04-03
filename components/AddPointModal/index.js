@@ -28,6 +28,7 @@ export default function AddPointModal() {
     delete payload.map;
     delete payload.clickable;
     delete payload.visible;
+    delete payload.icon;
 
     (await actionType) === 'new'
       ? addNewMarker(payload)

@@ -1,10 +1,11 @@
 import Map from 'components/Map';
-import Toolbar from '../components/Toolbar';
 import ToolbarStateProvider from '../context/ToolbarContext';
 import AddPointModal from '../components/AddPointModal';
 import ModalStateProvider from '../context/ModalContext';
 import { ToastContainer } from 'react-toastify';
 import { MarkersDataContextProvider } from '../context/MarkersDataContext';
+import ConfirmModal from '../components/ConfirmModal';
+import ConfirmModalProvider from '../context/ConfirmModalContext';
 
 export default function Home() {
   return (
@@ -20,14 +21,17 @@ export default function Home() {
         pauseOnHover
       />
       <MarkersDataContextProvider>
-        <ToolbarStateProvider>
-          <ModalStateProvider>
-            <>
-              <Map />
-              <AddPointModal />
-            </>
-          </ModalStateProvider>
-        </ToolbarStateProvider>
+        <ConfirmModalProvider>
+          <ToolbarStateProvider>
+            <ModalStateProvider>
+              <>
+                <Map />
+                <AddPointModal />
+                <ConfirmModal />
+              </>
+            </ModalStateProvider>
+          </ToolbarStateProvider>
+        </ConfirmModalProvider>
       </MarkersDataContextProvider>
     </main>
   );
