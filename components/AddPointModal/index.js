@@ -163,6 +163,7 @@ export default function AddPointModal() {
                               onChange={handleChange}
                               onBlur={handleBlur}
                               value={values.pass}
+                              checked={values.pass}
                             />
                             <label className="form-check-label" htmlFor="pass">
                               NYC Pass
