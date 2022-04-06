@@ -61,7 +61,8 @@ export default function AddPointModal() {
                     initialValues={{
                       ...pointData,
                       description: actionType === 'new' ? '-' : pointData.description,
-                      reservationInfo: actionType === 'new' ? '-' : pointData.reservationInfo
+                      reservationInfo: actionType === 'new' ? '-' : pointData.reservationInfo,
+                      neededTime: actionType === 'new' ? '-' : pointData.neededTime
                     }}
                     onSubmit={async (values, { setSubmitting, setFieldValue }) =>
                       handleSubmit(values, setSubmitting, toggleState, setFieldValue, actionType)
@@ -135,6 +136,20 @@ export default function AddPointModal() {
                             dateFormat="dd.MM.yyyy"
                             locale="pl-PL"
                             onChange={(data) => setFieldValue('visitDate', data)}
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="address" className="form-label fw-bold">
+                            Potrzebny czas
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="neededTime"
+                            name="neededTime"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.neededTime}
                           />
                         </div>
                         <div className={cx(styles.buttonsWrap)}>

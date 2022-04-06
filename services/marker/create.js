@@ -12,7 +12,8 @@ const schema = Joi.object({
   rating: Joi.number(),
   totalRatings: Joi.number(),
   reservationInfo: Joi.string(),
-  visitDate: Joi.string()
+  visitDate: Joi.string(),
+  neededTime: Joi.string()
 });
 
 export default async (payload) => {

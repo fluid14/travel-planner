@@ -93,6 +93,11 @@ const Marker = ({ marker, showMarker }) => {
                   </p>
                 </>
               )}
+              {marker.neededTime && (
+                <p className={cx(styles.info)}>
+                  <span>Potrzebny czas:</span> {marker.neededTime}
+                </p>
+              )}
               <div className={cx(styles.buttons)}>
                 <button
                   onClick={() => {
