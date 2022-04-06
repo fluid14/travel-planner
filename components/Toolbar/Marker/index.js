@@ -25,7 +25,12 @@ const Marker = ({ marker, showMarker }) => {
   return (
     <ToolbarStateConsumer>
       {({ toggleState }) => (
-        <div key={marker.id} className={cx({ [styles.pass]: marker.pass }, 'accordion-item')}>
+        <div
+          key={marker.id}
+          className={cx(
+            { [styles.pass]: marker.pass, [styles.visited]: marker.visited },
+            'accordion-item'
+          )}>
           <h2 className={cx(styles.header, 'accordion-header')} id={`selector-${marker.id}`}>
             <button
               className={cx('accordion-button', styles.accordionButton)}

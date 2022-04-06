@@ -63,7 +63,8 @@ export default function AddPointModal() {
                       description: actionType === 'new' ? '-' : pointData.description,
                       reservationInfo: actionType === 'new' ? '-' : pointData.reservationInfo,
                       neededTime: actionType === 'new' ? '-' : pointData.neededTime,
-                      pass: actionType === 'new' ? false : pointData.pass
+                      pass: actionType === 'new' ? false : pointData.pass,
+                      visited: actionType === 'new' ? false : pointData.visited
                     }}
                     onSubmit={async (values, { setSubmitting, setFieldValue }) =>
                       handleSubmit(values, setSubmitting, toggleState, setFieldValue, actionType)
@@ -77,6 +78,21 @@ export default function AddPointModal() {
                       handleSubmit
                     }) => (
                       <Form className="d-flex flex-column" onSubmit={handleSubmit}>
+                        <div className="form-check form-switch">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="visited"
+                            name="visited"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.visited}
+                            checked={values.visited}
+                          />
+                          <label className="form-check-label" htmlFor="visited">
+                            Odwiedzone?
+                          </label>
+                        </div>
                         <div className="mb-3">
                           <label htmlFor="title" className="form-label fw-bold">
                             Tytuł
