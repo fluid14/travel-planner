@@ -110,7 +110,7 @@ const Marker = ({ marker, showMarker }) => {
                   Pokaż
                 </button>
                 <a
-                  href={`https://www.google.com/maps/place/?q=place_id:${marker?.placeId}`}
+                  href={`https://maps.google.com/?ll=${marker.lat},${marker.lng}`}
                   target="_blank"
                   className={cx(styles.btn, 'btn btn-secondary')}>
                   Google Maps
