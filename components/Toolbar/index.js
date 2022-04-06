@@ -11,10 +11,19 @@ import Marker from './Marker';
 import 'moment/locale/pl.js';
 
 export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMap }) {
+  const [searchState, setSearchState] = useState();
   const { markersData, setMarkersData, getMarkers, showAllMarkers, setShowAllMarkers } =
     useContext(MarkersDataContext);
 
   const [markersByDate, setMarkersByDate] = useState(null);
+  const [markersBySearch, setMarkersBySearch] = useState(null);
+
+  const changeSearch = (value) => {
+    setSearchState(value);
+    setMarkersBySearch(
+      markersData.filter((item) => item.title.toLowerCase().includes(value.toLowerCase()))
+    );
+  };
 
   useEffect(() => {
     getMarkers();
@@ -81,8 +90,30 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
               </div>
             </div>
             <div className={cx(styles.pointsWrap, 'accordion')} id="points">
+              {!markersByDate && (
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Szukaj"
+                  value={searchState}
+                  onChange={(e) => changeSearch(e.target.value)}
+                />
+              )}
               {!markersByDate &&
+                !markersBySearch &&
                 markersData?.map((marker) => {
+                  return (
+                    <Marker
+                      key={marker.id}
+                      marker={marker}
+                      showMarker={showMarker}
+                      toggleState={toggleState}
+                    />
+                  );
+                })}
+              {!markersByDate &&
+                markersBySearch &&
+                markersBySearch?.map((marker) => {
                   return (
                     <Marker
                       key={marker.id}
