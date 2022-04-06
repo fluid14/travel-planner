@@ -9,6 +9,7 @@ import 'moment/locale/pl';
 import { ConfirmModalContext } from '../../../context/ConfirmModalContext';
 
 const Marker = ({ marker, showMarker }) => {
+  console.log(marker);
   const { removeMarker, setShowAllMarkers } = useContext(MarkersDataContext);
   const { toggleState } = useContext(ModalStateContext);
   const { toggleState: confirmModalState } = useContext(ConfirmModalContext);
@@ -24,10 +25,10 @@ const Marker = ({ marker, showMarker }) => {
   return (
     <ToolbarStateConsumer>
       {({ toggleState }) => (
-        <div key={marker.id} className={cx(styles.bar, 'accordion-item')}>
+        <div key={marker.id} className={cx({ [styles.pass]: marker.pass }, 'accordion-item')}>
           <h2 className={cx(styles.header, 'accordion-header')} id={`selector-${marker.id}`}>
             <button
-              className="accordion-button"
+              className={cx('accordion-button', styles.accordionButton)}
               type="button"
               data-bs-toggle="collapse"
               data-bs-target={`#collapse-${marker.id}`}

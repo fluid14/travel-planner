@@ -13,7 +13,8 @@ export default async (payload) => {
     address,
     recordId,
     visitDate,
-    neededTime
+    neededTime,
+    pass
   } = payload;
   return await airDB('points').update([
     {
@@ -29,7 +30,8 @@ export default async (payload) => {
         rating,
         address,
         visitDate,
-        neededTime
+        neededTime,
+        pass
       }
     }
   ]);

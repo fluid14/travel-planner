@@ -62,7 +62,8 @@ export default function AddPointModal() {
                       ...pointData,
                       description: actionType === 'new' ? '-' : pointData.description,
                       reservationInfo: actionType === 'new' ? '-' : pointData.reservationInfo,
-                      neededTime: actionType === 'new' ? '-' : pointData.neededTime
+                      neededTime: actionType === 'new' ? '-' : pointData.neededTime,
+                      pass: actionType === 'new' ? false : pointData.pass
                     }}
                     onSubmit={async (values, { setSubmitting, setFieldValue }) =>
                       handleSubmit(values, setSubmitting, toggleState, setFieldValue, actionType)
@@ -151,6 +152,22 @@ export default function AddPointModal() {
                             onBlur={handleBlur}
                             value={values.neededTime}
                           />
+                        </div>
+                        <div className="mb-3">
+                          <div className="form-check form-switch">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              id="pass"
+                              name="pass"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.pass}
+                            />
+                            <label className="form-check-label" htmlFor="pass">
+                              NYC Pass
+                            </label>
+                          </div>
                         </div>
                         <div className={cx(styles.buttonsWrap)}>
                           <button type="submit" disabled={isSubmitting} className="btn btn-primary">
