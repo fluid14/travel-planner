@@ -13,6 +13,25 @@ $borderRadius: 20px
   .accordionButton
     opacity: .5
 
+.accordionButton
+  &::before
+    content: ''
+    display: block
+    position: absolute
+    width: 4px
+    height: 100%
+    top: 0
+    right: 0
+
+  &.food
+    &::before
+      background-color: #1dd1a1
+
+  &.attraction
+    &::before
+      background-color: #feca57
+
+
 .body
   .info
     display: flex

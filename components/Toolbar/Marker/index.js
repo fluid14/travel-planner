@@ -28,12 +28,18 @@ const Marker = ({ marker, showMarker }) => {
         <div
           key={marker.id}
           className={cx(
-            { [styles.pass]: marker.pass, [styles.visited]: marker.visited },
+            {
+              [styles.pass]: marker.pass,
+              [styles.visited]: marker.visited
+            },
             'accordion-item'
           )}>
           <h2 className={cx(styles.header, 'accordion-header')} id={`selector-${marker.id}`}>
             <button
-              className={cx('accordion-button', styles.accordionButton)}
+              className={cx('accordion-button', styles.accordionButton, {
+                [styles.food]: marker.category === 'food',
+                [styles.attraction]: marker.category === 'attraction'
+              })}
               type="button"
               data-bs-toggle="collapse"
               data-bs-target={`#collapse-${marker.id}`}

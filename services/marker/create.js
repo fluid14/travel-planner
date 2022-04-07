@@ -15,7 +15,8 @@ const schema = Joi.object({
   visitDate: Joi.string(),
   neededTime: Joi.string(),
   pass: Joi.bool(),
-  visited: Joi.bool()
+  visited: Joi.bool(),
+  category: Joi.any()
 });
 
 export default async (payload) => {

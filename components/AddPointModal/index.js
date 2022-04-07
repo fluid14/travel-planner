@@ -64,7 +64,8 @@ export default function AddPointModal() {
                       reservationInfo: actionType === 'new' ? '-' : pointData.reservationInfo,
                       neededTime: actionType === 'new' ? '-' : pointData.neededTime,
                       pass: actionType === 'new' ? false : pointData.pass,
-                      visited: actionType === 'new' ? false : pointData.visited
+                      visited: actionType === 'new' ? false : pointData.visited,
+                      category: actionType === 'new' ? '' : pointData.category
                     }}
                     onSubmit={async (values, { setSubmitting, setFieldValue }) =>
                       handleSubmit(values, setSubmitting, toggleState, setFieldValue, actionType)
@@ -78,21 +79,6 @@ export default function AddPointModal() {
                       handleSubmit
                     }) => (
                       <Form className="d-flex flex-column" onSubmit={handleSubmit}>
-                        <div className="form-check form-switch">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="visited"
-                            name="visited"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.visited}
-                            checked={values.visited}
-                          />
-                          <label className="form-check-label" htmlFor="visited">
-                            Odwiedzone?
-                          </label>
-                        </div>
                         <div className="mb-3">
                           <label htmlFor="title" className="form-label fw-bold">
                             Tytuł
@@ -143,47 +129,84 @@ export default function AddPointModal() {
                             value={values.reservationInfo}
                           />
                         </div>
-                        <div className="mb-3">
-                          <label htmlFor="description" className="form-label fw-bold">
-                            Planowana wizyta
-                          </label>
-                          <DatePicker
-                            className="form-control"
-                            selected={new Date(values.visitDate || new Date())}
-                            dateFormat="dd.MM.yyyy"
-                            locale="pl-PL"
-                            onChange={(data) => setFieldValue('visitDate', data)}
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label htmlFor="address" className="form-label fw-bold">
-                            Potrzebny czas
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="neededTime"
-                            name="neededTime"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.neededTime}
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <div className="form-check form-switch">
+                        <div className="row">
+                          <div className="mb-3 col-6">
+                            <label htmlFor="description" className="form-label fw-bold">
+                              Planowana wizyta
+                            </label>
+                            <DatePicker
+                              className="form-control"
+                              selected={new Date(values.visitDate || new Date())}
+                              dateFormat="dd.MM.yyyy"
+                              locale="pl-PL"
+                              onChange={(data) => setFieldValue('visitDate', data)}
+                            />
+                          </div>
+                          <div className="mb-3 col-6">
+                            <label htmlFor="address" className="form-label fw-bold">
+                              Potrzebny czas
+                            </label>
                             <input
-                              className="form-check-input"
-                              type="checkbox"
-                              id="pass"
-                              name="pass"
+                              type="text"
+                              className="form-control"
+                              id="neededTime"
+                              name="neededTime"
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={values.pass}
-                              checked={values.pass}
+                              value={values.neededTime}
                             />
-                            <label className="form-check-label" htmlFor="pass">
-                              NYC Pass
+                          </div>
+                          <div className="mb-3 col-6">
+                            <label htmlFor="address" className="form-label fw-bold">
+                              Kategoria
                             </label>
+                            <select
+                              className="form-select"
+                              id="category"
+                              name="category"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.category}>
+                              <option value="" selected>
+                                -
+                              </option>
+                              <option value="attraction">Atrakcja</option>
+                              <option value="food">Jedzenie</option>
+                            </select>
+                          </div>
+                          <div className="mb-3 col-6">
+                            <div className="row">
+                              <div className="form-check form-switch mt-3">
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  id="visited"
+                                  name="visited"
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.visited}
+                                  checked={values.visited}
+                                />
+                                <label className="form-check-label" htmlFor="visited">
+                                  Odwiedzone?
+                                </label>
+                              </div>
+                              <div className="form-check form-switch mt-1">
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  id="pass"
+                                  name="pass"
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  value={values.pass}
+                                  checked={values.pass}
+                                />
+                                <label className="form-check-label" htmlFor="pass">
+                                  NYC Pass
+                                </label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div className={cx(styles.buttonsWrap)}>
