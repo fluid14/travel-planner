@@ -70,13 +70,17 @@ export default function Map() {
   };
 
   const showMarker = (markerTemp, setShowMarkerFlag) => {
-    const marker = new google.maps.Marker({
+    let markerObj = {
       ...markerTemp,
+      icon: 'marker_google_visited.png',
       position: {
         lat: markerTemp.lat,
         lng: markerTemp.lng
       }
-    });
+    };
+    if (markerTemp.category === 'food') markerObj.icon = 'marker_google_green.png';
+
+    const marker = new google.maps.Marker(markerObj);
     marker.setMap(map);
     markers.push(marker);
     markerEvent(google, marker, markerTemp, false);
