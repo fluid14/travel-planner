@@ -150,7 +150,7 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
               {markersByVisited &&
                 markersByVisited?.map((markers) => {
                   return (
-                    <div key={markers.date}>
+                    <div key={markers.title}>
                       <div
                         className={cx(
                           styles.dataHeader,

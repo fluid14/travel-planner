@@ -9,7 +9,6 @@ import 'moment/locale/pl';
 import { ConfirmModalContext } from '../../../context/ConfirmModalContext';
 
 const Marker = ({ marker, showMarker }) => {
-  console.log(marker);
   const { removeMarker, setShowAllMarkers } = useContext(MarkersDataContext);
   const { toggleState } = useContext(ModalStateContext);
   const { toggleState: confirmModalState } = useContext(ConfirmModalContext);

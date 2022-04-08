@@ -14,6 +14,9 @@ export default function Map() {
   let mapStyles = [];
   let map;
   let markers = [];
+  const geolocation = useRef(null);
+
+  console.log(geolocation);
 
   const mapOptions = {
     center: {
@@ -179,13 +182,8 @@ export default function Map() {
       });
 
       // Geolocation
-      const locationButton = document.createElement('button');
       const infoWindow = new google.maps.InfoWindow();
-      locationButton.textContent = 'Geolocation';
-      locationButton.classList.add('custom-map-control-button');
-      map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-      locationButton.addEventListener('click', () => {
-        // Try HTML5 geolocation.
+      geolocation.current.addEventListener('click', () => {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -202,7 +200,6 @@ export default function Map() {
             }
           );
         } else {
-          // Browser doesn't support Geolocation
           handleLocationError(false, infoWindow, map.getCenter());
         }
       });
@@ -240,6 +237,9 @@ export default function Map() {
             {value}
           </button>
         ))}
+        <button className={cx(styles.btn, styles.geo, 'btn', 'btn-primary')} ref={geolocation}>
+          <img src="gps.png" alt="gps" />
+        </button>
       </div>
       <Toolbar showMarker={showMarker} showAllMarkers={showAllMarkers} />
       <ModalStateConsumer>
