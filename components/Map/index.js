@@ -55,15 +55,26 @@ export default function Map() {
 
       new google.maps.InfoWindow({
         content:
-          `<p class="title">${marker?.title}</p>` +
-          `<p>${marker?.address}</p>` +
-          `<p><span>Oceny: </span>${marker?.rating}/${marker?.totalRatings}</p>` +
-          `<p><span>Poziom cenowy: </span>${marker?.priceLevel}</p>` +
-          `<a href="https://www.google.com/maps/place/?q=place_id:${marker?.placeId}" target="_blank" class="btn btn-primary">Pokaż w Google Maps</a>` +
-          (addToList &&
-            `<button class="btn btn-primary" type="button" onclick="document.getElementById('addMarkerButton').click();" >Dodaj do list</button>`) +
-          (!addToList &&
-            `<button class="btn btn-primary" type="button" onClick="document.getElementById('removeMarkerButton').click();">Schowaj marker</button>`)
+          (marker?.title ? `<p class="title">${marker?.title}</p>` : '') +
+          (marker?.address ? `<br/><p>${marker?.address}</p>` : '') +
+          (marker?.rating
+            ? `<br/><p><span>Oceny: </span>${marker?.rating}/${marker?.totalRatings}</p>`
+            : '') +
+          (marker?.priceLevel ? `<p><span>Poziom cenowy: </span>${marker?.priceLevel}</p>` : '') +
+          (marker?.description ? `<br/><p><span>Opis: </span>${marker?.description}</p>` : '') +
+          (marker?.reservationInfo
+            ? `<br/><p><span>Rezerwacja: </span>${marker?.reservationInfo}</p>`
+            : '') +
+          (marker?.neededTime
+            ? `<br/><p><span>Potrzebny czas: </span>${marker?.neededTime}</p>`
+            : '') +
+          `<a href="https://maps.google.com/?ll=${marker.lat},${marker.lng}" target="_blank" class="btn btn-primary">Pokaż w Google Maps</a>` +
+          (addToList
+            ? `<button class="btn btn-primary" type="button" onclick="document.getElementById('addMarkerButton').click();" >Dodaj do list</button>`
+            : '') +
+          (!addToList
+            ? `<button class="btn btn-primary" type="button" onClick="document.getElementById('removeMarkerButton').click();">Schowaj marker</button>`
+            : '')
       }).open({
         anchor: marker,
         map,
