@@ -2,12 +2,16 @@ import { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ToolbarStateContext } from './ToolbarContext';
+import moment from 'moment';
+import { removeDuplicateFromArray } from '../utils';
 
 const MarkersDataContext = createContext(null);
 
 const MarkersDataContextProvider = ({ children }) => {
   const [markersData, setMarkersData] = useState();
   const [showAllMarkers, setShowAllMarkers] = useState(false);
+  const [markersByDate, setMarkersByDate] = useState(null);
+  const [markersByVisited, setMarkersByVisited] = useState(null);
 
   const getMarkers = () => {
     const getList = toast.loading('Pobieram listę punktów');
@@ -86,6 +90,61 @@ const MarkersDataContextProvider = ({ children }) => {
       .finally(() => getMarkers());
   };
 
+  const sortByDate = () => {
+    removeSort();
+    const sortByDateTemp = { undefined: [] };
+    markersData.forEach(({ visitDate }) => {
+      const groupDate = visitDate ? moment(visitDate).format('DD.MM.YYYY') : 'Nie określono';
+
+      markersData.forEach((marker) => {
+        const markerDate = marker.visitDate ? moment(marker.visitDate).format('DD.MM.YYYY') : null;
+
+        if (!sortByDateTemp[groupDate] && groupDate === markerDate) {
+          Object.assign(sortByDateTemp, { [groupDate]: [] });
+          if (groupDate) {
+            sortByDateTemp[groupDate].push(marker);
+            sortByDateTemp[groupDate] = removeDuplicateFromArray(sortByDateTemp[groupDate]);
+          }
+        } else if (sortByDateTemp[groupDate] && groupDate === markerDate) {
+          sortByDateTemp[groupDate].push(marker);
+          sortByDateTemp[groupDate] = removeDuplicateFromArray(sortByDateTemp[groupDate]);
+        } else if (!markerDate) {
+          sortByDateTemp.undefined.push(marker);
+          sortByDateTemp.undefined = removeDuplicateFromArray(sortByDateTemp.undefined);
+        }
+      });
+    });
+
+    let temp = [];
+    for (const [key, value] of Object.entries(sortByDateTemp)) {
+      temp.push({ date: key, value });
+    }
+
+    temp.sort((a, b) => moment(b.date) - moment(a.date)).reverse();
+    setMarkersByDate(temp);
+  };
+
+  const sortByVisited = () => {
+    removeSort();
+    const sortByVisitedTemp = { Odwiedzone: [], 'Nie odwiedzone': [] };
+    markersData.forEach((marker) => {
+      if (marker.visited) sortByVisitedTemp['Odwiedzone'].push(marker);
+      if (!marker.visited) sortByVisitedTemp['Nie odwiedzone'].push(marker);
+    });
+
+    let temp = [];
+    for (const [key, value] of Object.entries(sortByVisitedTemp)) {
+      temp.push({ title: key, value });
+    }
+
+    setMarkersByVisited(temp);
+  };
+
+  const removeSort = () => {
+    setMarkersByDate(null);
+    setMarkersByVisited(null);
+  };
+
   return (
     <MarkersDataContext.Provider
       value={{
@@ -96,7 +155,12 @@ const MarkersDataContextProvider = ({ children }) => {
         editMarker,
         addNewMarker,
         showAllMarkers,
-        setShowAllMarkers
+        setShowAllMarkers,
+        markersByDate,
+        markersByVisited,
+        sortByDate,
+        sortByVisited,
+        removeSort
       }}>
       {children}
     </MarkersDataContext.Provider>
