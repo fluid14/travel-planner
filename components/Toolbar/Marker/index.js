@@ -134,16 +134,16 @@ const Marker = ({ marker, showMarker }) => {
                   type="button">
                   Edytuj
                 </button>
-                <button
-                  onClick={() => {
-                    removeMarker(marker.recordId);
-                    // confirmModalState('Czy na pewno chcesz usunąć?', removeMarker, marker.recordId);
-                    toggleState();
-                  }}
-                  className={cx(styles.btn, 'btn btn-danger')}
-                  type="button">
-                  Usuń
-                </button>
+                {/*<button*/}
+                {/*  onClick={() => {*/}
+                {/*    removeMarker(marker.recordId);*/}
+                {/*    // confirmModalState('Czy na pewno chcesz usunąć?', removeMarker, marker.recordId);*/}
+                {/*    toggleState();*/}
+                {/*  }}*/}
+                {/*  className={cx(styles.btn, 'btn btn-danger')}*/}
+                {/*  type="button">*/}
+                {/*  Usuń*/}
+                {/*</button>*/}
               </div>
             </div>
           </div>
