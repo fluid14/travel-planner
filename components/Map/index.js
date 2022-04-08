@@ -72,13 +72,15 @@ export default function Map() {
   const showMarker = (markerTemp, setShowMarkerFlag) => {
     let markerObj = {
       ...markerTemp,
-      icon: 'marker_google_visited.png',
+      icon: 'marker_red.png',
       position: {
         lat: markerTemp.lat,
         lng: markerTemp.lng
       }
     };
-    if (markerTemp.category === 'food') markerObj.icon = 'marker_google_green.png';
+    if (markerTemp.category === 'food') markerObj.icon = 'marker_yellow.png';
+    if (markerTemp.pass) markerObj.icon = 'marker_green.png';
+    if (markerTemp.visited) markerObj.icon = 'marker_visited.png';
 
     const marker = new google.maps.Marker(markerObj);
     marker.setMap(map);
