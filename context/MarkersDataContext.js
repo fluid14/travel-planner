@@ -9,6 +9,7 @@ const MarkersDataContext = createContext(null);
 
 const MarkersDataContextProvider = ({ children }) => {
   const [markersData, setMarkersData] = useState();
+  const [markersDataGrouped, setMarkersDataGrouped] = useState();
   const [showAllMarkers, setShowAllMarkers] = useState(false);
   const [markersByDate, setMarkersByDate] = useState(null);
   const [markersByVisited, setMarkersByVisited] = useState(null);
@@ -18,7 +19,13 @@ const MarkersDataContextProvider = ({ children }) => {
     return axios
       .get('/api/markers')
       .then((res) => res.data)
-      .then(setMarkersData)
+      .then((res) => {
+        setMarkersData(res);
+        const food = res.filter((marker) => marker.category === 'food');
+        const attraction = res.filter((marker) => marker.category === 'attraction');
+        setMarkersDataGrouped({ food, attraction });
+      })
+      .then((res) => console.log(res))
       .finally(() =>
         toast.update(getList, {
           render: 'Pobrano punkty!',
@@ -149,6 +156,7 @@ const MarkersDataContextProvider = ({ children }) => {
     <MarkersDataContext.Provider
       value={{
         markersData,
+        markersDataGrouped,
         setMarkersData,
         getMarkers,
         removeMarker,

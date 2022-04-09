@@ -13,6 +13,7 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
   const [searchState, setSearchState] = useState();
   const {
     markersData,
+    markersDataGrouped,
     setMarkersData,
     getMarkers,
     showAllMarkers,
@@ -78,19 +79,33 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                   onChange={(e) => changeSearch(e.target.value)}
                 />
               )}
+
               {!markersByDate &&
                 !markersBySearch &&
                 !markersByVisited &&
-                markersData?.map((marker) => {
-                  return (
-                    <Marker
-                      key={marker.id}
-                      marker={marker}
-                      showMarker={showMarker}
-                      toggleState={toggleState}
-                    />
-                  );
-                })}
+                markersDataGrouped?.attraction &&
+                markersDataGrouped?.attraction.map((marker) => (
+                  <Marker
+                    key={marker.id}
+                    marker={marker}
+                    showMarker={showMarker}
+                    toggleState={toggleState}
+                  />
+                ))}
+
+              {!markersByDate &&
+                !markersBySearch &&
+                !markersByVisited &&
+                markersDataGrouped?.food &&
+                markersDataGrouped?.food.map((marker) => (
+                  <Marker
+                    key={marker.id}
+                    marker={marker}
+                    showMarker={showMarker}
+                    toggleState={toggleState}
+                  />
+                ))}
+
               {!markersByDate &&
                 !markersByVisited &&
                 markersBySearch &&
