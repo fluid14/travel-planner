@@ -79,7 +79,33 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                   onChange={(e) => changeSearch(e.target.value)}
                 />
               )}
-
+              {!markersByDate &&
+                !markersBySearch &&
+                !markersByVisited &&
+                markersDataGrouped?.attraction &&
+                markersDataGrouped?.attraction.length > 0 && (
+                  <div
+                    className={cx(
+                      styles.dataHeader,
+                      'd-flex justify-content-between align-items-end'
+                    )}>
+                    <p className={cx(styles.dateTitle)}>Atrakcje</p>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      onClick={() => {
+                        showAllMarkersOnMap(
+                          showAllMarkers,
+                          setShowAllMarkers,
+                          markersDataGrouped.attraction,
+                          true
+                        );
+                        toggleState();
+                      }}>
+                      Pokaż na mapie
+                    </button>
+                  </div>
+                )}
               {!markersByDate &&
                 !markersBySearch &&
                 !markersByVisited &&
@@ -92,7 +118,33 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                     toggleState={toggleState}
                   />
                 ))}
-
+              {!markersByDate &&
+                !markersBySearch &&
+                !markersByVisited &&
+                markersDataGrouped?.food &&
+                markersDataGrouped?.food.length > 0 && (
+                  <div
+                    className={cx(
+                      styles.dataHeader,
+                      'd-flex justify-content-between align-items-end'
+                    )}>
+                    <p className={cx(styles.dateTitle)}>Jedzenie</p>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      onClick={() => {
+                        showAllMarkersOnMap(
+                          showAllMarkers,
+                          setShowAllMarkers,
+                          markersDataGrouped.food,
+                          true
+                        );
+                        toggleState();
+                      }}>
+                      Pokaż na mapie
+                    </button>
+                  </div>
+                )}
               {!markersByDate &&
                 !markersBySearch &&
                 !markersByVisited &&

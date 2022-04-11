@@ -25,7 +25,6 @@ const MarkersDataContextProvider = ({ children }) => {
         const attraction = res.filter((marker) => marker.category === 'attraction');
         setMarkersDataGrouped({ food, attraction });
       })
-      .then((res) => console.log(res))
       .finally(() =>
         toast.update(getList, {
           render: 'Pobrano punkty!',
