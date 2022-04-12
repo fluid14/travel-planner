@@ -60,12 +60,13 @@ export default function AddPointModal() {
                     enableReinitialize={true}
                     initialValues={{
                       ...pointData,
-                      description: actionType === 'new' ? '-' : pointData.description,
-                      reservationInfo: actionType === 'new' ? '-' : pointData.reservationInfo,
-                      neededTime: actionType === 'new' ? '-' : pointData.neededTime,
-                      pass: actionType === 'new' ? false : pointData.pass,
-                      visited: actionType === 'new' ? false : pointData.visited,
-                      category: actionType === 'new' ? '' : pointData.category
+                      description: actionType === 'new' ? '-' : pointData?.description || '',
+                      reservationInfo:
+                        actionType === 'new' ? '-' : pointData?.reservationInfo || '',
+                      neededTime: actionType === 'new' ? '-' : pointData?.neededTime || '',
+                      pass: actionType === 'new' ? false : pointData?.pass,
+                      visited: actionType === 'new' ? false : pointData?.visited,
+                      category: actionType === 'new' ? '' : pointData?.category
                     }}
                     onSubmit={async (values, { setSubmitting, setFieldValue }) =>
                       handleSubmit(values, setSubmitting, toggleState, setFieldValue, actionType)
@@ -115,7 +116,7 @@ export default function AddPointModal() {
                             name="description"
                             onChange={(data) => setFieldValue('description', data)}
                             editorLoaded={editorLoaded}
-                            value={values.description}
+                            value={values?.description}
                           />
                         </div>
                         <div className="mb-3">
@@ -126,7 +127,7 @@ export default function AddPointModal() {
                             name="reservationInfo"
                             onChange={(data) => setFieldValue('reservationInfo', data)}
                             editorLoaded={editorLoaded}
-                            value={values.reservationInfo}
+                            value={values?.reservationInfo}
                           />
                         </div>
                         <div className="row">
