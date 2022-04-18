@@ -22,7 +22,9 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
     sortByVisited,
     markersByDate,
     markersByVisited,
-    removeSort
+    removeSort,
+    markersByDistrict,
+    sortByDistrict
   } = useContext(MarkersDataContext);
 
   const [markersBySearch, setMarkersBySearch] = useState(null);
@@ -45,7 +47,7 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
           <div className={cx(styles.toolbarWrap, { [styles.active]: state })}>
             <div className="d-flex justify-content-between align-items-start mb-3">
               <ShowToolbarButton positionStatic>Schowaj</ShowToolbarButton>
-              <div className="d-flex flex-column">
+              <div className="d-flex flex-wrap">
                 <button
                   type="button"
                   onClick={() => {
@@ -63,14 +65,20 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                 </button>
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary mb-2"
                   onClick={() => (!markersByVisited ? sortByVisited() : removeSort())}>
                   {!markersByVisited ? 'Posortuj odwiedzone' : 'Usuń sortowanie'}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => (!markersByDistrict ? sortByDistrict() : removeSort())}>
+                  {!markersByDistrict ? 'Posortuj według dzielnic' : 'Usuń sortowanie'}
                 </button>
               </div>
             </div>
             <div className={cx(styles.pointsWrap, 'accordion')} id="points">
-              {!markersByDate && !markersByVisited && (
+              {!markersByDate && !markersByVisited && !markersByDistrict && (
                 <input
                   type="text"
                   className="form-control mb-3"
@@ -82,6 +90,7 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
               {!markersByDate &&
                 !markersBySearch &&
                 !markersByVisited &&
+                !markersByDistrict &&
                 markersDataGrouped?.attraction &&
                 markersDataGrouped?.attraction.length > 0 && (
                   <div
@@ -109,6 +118,7 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
               {!markersByDate &&
                 !markersBySearch &&
                 !markersByVisited &&
+                !markersByDistrict &&
                 markersDataGrouped?.attraction &&
                 markersDataGrouped?.attraction.map((marker) => (
                   <Marker
@@ -121,6 +131,7 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
               {!markersByDate &&
                 !markersBySearch &&
                 !markersByVisited &&
+                !markersByDistrict &&
                 markersDataGrouped?.food &&
                 markersDataGrouped?.food.length > 0 && (
                   <div
@@ -148,6 +159,7 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
               {!markersByDate &&
                 !markersBySearch &&
                 !markersByVisited &&
+                !markersByDistrict &&
                 markersDataGrouped?.food &&
                 markersDataGrouped?.food.map((marker) => (
                   <Marker
@@ -160,6 +172,7 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
 
               {!markersByDate &&
                 !markersByVisited &&
+                !markersByDistrict &&
                 markersBySearch &&
                 markersBySearch?.map((marker) => {
                   return (
@@ -172,6 +185,7 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                   );
                 })}
               {markersByDate &&
+                !markersByDistrict &&
                 markersByDate?.map((markers) => {
                   return (
                     <div key={markers.date}>
@@ -187,6 +201,44 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
                           {markers.date === 'undefined'
                             ? 'Nie przydzielono'
                             : `${markers.date} ${moment(markers.date).locale('pl').format('dddd')}`}
+                        </p>
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm"
+                          onClick={() => {
+                            showAllMarkersOnMap(
+                              showAllMarkers,
+                              setShowAllMarkers,
+                              markers.value,
+                              true
+                            );
+                            toggleState();
+                          }}>
+                          Pokaż na mapie
+                        </button>
+                      </div>
+                      {markers.value.map((marker) => (
+                        <Marker
+                          key={marker.id}
+                          marker={marker}
+                          showMarker={showMarker}
+                          toggleState={toggleState}
+                        />
+                      ))}
+                    </div>
+                  );
+                })}
+              {markersByDistrict &&
+                markersByDistrict?.map((markers) => {
+                  return (
+                    <div key={markers.date}>
+                      <div
+                        className={cx(
+                          styles.dataHeader,
+                          'd-flex justify-content-between align-items-end'
+                        )}>
+                        <p className={cx(styles.dateTitle)}>
+                          {markers.date === 'undefined' ? 'Nie przydzielono' : `${markers.date}`}
                         </p>
                         <button
                           type="button"

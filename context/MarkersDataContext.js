@@ -13,6 +13,7 @@ const MarkersDataContextProvider = ({ children }) => {
   const [showAllMarkers, setShowAllMarkers] = useState(false);
   const [markersByDate, setMarkersByDate] = useState(null);
   const [markersByVisited, setMarkersByVisited] = useState(null);
+  const [markersByDistrict, setMarkersByDistrict] = useState(null);
 
   const getMarkers = () => {
     const getList = toast.loading('Pobieram listę punktów');
@@ -130,6 +131,43 @@ const MarkersDataContextProvider = ({ children }) => {
     setMarkersByDate(temp);
   };
 
+  const sortByDistrict = () => {
+    removeSort();
+    const sortByDistrictTemp = { undefined: [] };
+    markersData.forEach(({ district }) => {
+      const groupDistrict = district || 'Nie określono';
+
+      markersData.forEach((marker) => {
+        const markerDistrict = marker.district || null;
+
+        if (!sortByDistrictTemp[groupDistrict] && groupDistrict === markerDistrict) {
+          Object.assign(sortByDistrictTemp, { [groupDistrict]: [] });
+          if (groupDistrict) {
+            sortByDistrictTemp[groupDistrict].push(marker);
+            sortByDistrictTemp[groupDistrict] = removeDuplicateFromArray(
+              sortByDistrictTemp[groupDistrict]
+            );
+          }
+        } else if (sortByDistrictTemp[groupDistrict] && groupDistrict === markerDistrict) {
+          sortByDistrictTemp[groupDistrict].push(marker);
+          sortByDistrictTemp[groupDistrict] = removeDuplicateFromArray(
+            sortByDistrictTemp[groupDistrict]
+          );
+        } else if (!markerDistrict) {
+          sortByDistrictTemp.undefined.push(marker);
+          sortByDistrictTemp.undefined = removeDuplicateFromArray(sortByDistrictTemp.undefined);
+        }
+      });
+    });
+
+    let temp = [];
+    for (const [key, value] of Object.entries(sortByDistrictTemp)) {
+      temp.push({ date: key, value });
+    }
+
+    setMarkersByDistrict(temp);
+  };
+
   const sortByVisited = () => {
     removeSort();
     const sortByVisitedTemp = { Odwiedzone: [], 'Nie odwiedzone': [] };
@@ -149,6 +187,7 @@ const MarkersDataContextProvider = ({ children }) => {
   const removeSort = () => {
     setMarkersByDate(null);
     setMarkersByVisited(null);
+    setMarkersByDistrict(null);
   };
 
   return (
@@ -167,7 +206,9 @@ const MarkersDataContextProvider = ({ children }) => {
         markersByVisited,
         sortByDate,
         sortByVisited,
-        removeSort
+        removeSort,
+        markersByDistrict,
+        sortByDistrict
       }}>
       {children}
     </MarkersDataContext.Provider>
