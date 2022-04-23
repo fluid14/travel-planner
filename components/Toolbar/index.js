@@ -45,33 +45,33 @@ export default function Toolbar({ showMarker, showAllMarkers: showAllMarkersOnMa
       {({ state, toggleState }) => (
         <>
           <div className={cx(styles.toolbarWrap, { [styles.active]: state })}>
-            <div className="d-flex justify-content-between align-items-start mb-3">
+            <div className="d-flex flex-column justify-content-between align-items-start mb-3">
               <ShowToolbarButton positionStatic>Schowaj</ShowToolbarButton>
-              <div className="d-flex flex-wrap">
+              <div className="d-flex flex-wrap mt-3">
                 <button
                   type="button"
                   onClick={() => {
                     showAllMarkersOnMap(showAllMarkers, setShowAllMarkers, markersData);
                     toggleState();
                   }}
-                  className="btn btn-primary mb-2">
+                  className="btn btn-primary mb-2 me-2">
                   {!showAllMarkers ? 'Pokaż wszystkie' : 'Ukryj wszystkie'}
                 </button>
                 <button
                   type="button"
-                  className="btn btn-primary mb-2"
+                  className="btn btn-primary mb-2 me-2"
                   onClick={() => (!markersByDate ? sortByDate() : removeSort())}>
                   {!markersByDate ? 'Posortuj według dat' : 'Usuń sortowanie'}
                 </button>
                 <button
                   type="button"
-                  className="btn btn-primary mb-2"
+                  className="btn btn-primary mb-2 me-2"
                   onClick={() => (!markersByVisited ? sortByVisited() : removeSort())}>
                   {!markersByVisited ? 'Posortuj odwiedzone' : 'Usuń sortowanie'}
                 </button>
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary mb-2 me-2"
                   onClick={() => (!markersByDistrict ? sortByDistrict() : removeSort())}>
                   {!markersByDistrict ? 'Posortuj według dzielnic' : 'Usuń sortowanie'}
                 </button>
