@@ -95,6 +95,9 @@ export default function Map() {
     if (markerTemp.category === 'food') markerObj.icon = 'marker_yellow.png';
     if (markerTemp.pass) markerObj.icon = 'marker_green.png';
     if (markerTemp.visited) markerObj.icon = 'marker_visited.png';
+    if (markerTemp.visited && markerTemp.pass) markerObj.icon = 'marker_green_visited.png';
+    if (markerTemp.visited && markerTemp.category === 'food')
+      markerObj.icon = 'marker_yellow_visited.png';
 
     const marker = new google.maps.Marker(markerObj);
     marker.setMap(map);
